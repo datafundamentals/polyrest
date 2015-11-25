@@ -1,0 +1,74 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../item-hateoas/item-hateoas.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
+<dom-module id="item-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <item-ajax
+      id="itemajax"
+      deslashedurl="{{listurl}}"
+      on-response="populate">
+    </item-ajax>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'item-list',
+
+        properties: {
+          listurl: {
+            type: String,
+            notify: true
+          },
+          titleName: {
+            type: String,
+            notify: true
+          }
+        },
+        populate: function () {
+          this.populateTitle();
+          this.populateBody();
+        },
+        createFieldInputBox: function (key, value) {
+          if (key.startsWith("_")) {
+            return;
+          }
+          var bodyDiv = this.$.itemajax.bodyDiv;
+          var link = document.createElement("A");
+          var brElement = document.createElement("BR");
+          link.innerText = key;
+          link.setAttribute("href", value);
+          bodyDiv.appendChild(link);
+          bodyDiv.appendChild(brElement);
+        },
+
+        populateBody: function () {
+          this.$.itemajax.bodyDiv.innerText = "";
+          var obj = false;
+          try {
+            obj = this.$.itemajax.jsonObj._links;
+          } catch (err) {
+          }
+          if (obj) {
+            for (var key in obj) {
+              var attrName = key;
+              var linkText = DfHateoas.DecodeUrl.encodeUrl("/itemselect/", obj[key].href);
+              this.createFieldInputBox(key, linkText);
+            }
+          }
+        },
+
+        populateTitle: function () {
+          this.titleHead = "REST APIS found at " + DfHateoas.DecodeUrl.usableUrl;
+        }
+      });
+    })();
+  </script>
+</dom-module>

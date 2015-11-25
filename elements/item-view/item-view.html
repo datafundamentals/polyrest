@@ -1,0 +1,93 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../item-hateoas/item-hateoas.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
+<dom-module id="item-view">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div><h5>REST API for <span>{{viewurl}}</span>:</h5></div>
+    <item-ajax
+      id="itemajax"
+      deslashedurl="{{viewurl}}"
+      on-response="populate">
+    </item-ajax>
+
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'item-view',
+
+        properties: {
+          viewurl: {
+            type: String,
+            notify: true
+          },
+          titleName: {
+            type: String,
+            notify: true
+          }
+        },
+        populateTitle: function () {
+          var obj = false;
+          try {
+            obj = DfHateoas.DecodeUrl.usableUrl;
+          } catch (err) {
+          }
+          if (obj) {
+            this.titleHead = this.extractTitle(obj);
+          } else {
+            this.titleHead = "No Data Found For This Link"
+          }
+        },
+
+        extractTitle: function(url){
+          var value = ""+url;
+          var previousValue = "";
+          while(value.indexOf("/")>-1){
+            previousValue = value;
+            value = value.substring(value.indexOf("/")+1, value.length);
+          }
+          return previousValue;
+        },
+
+        createFieldInputBox: function (key, value) {
+          if (key.startsWith("_")) {
+            return;
+          }
+          var bodyDiv = this.$.itemajax.titleDiv;
+          var descripText = document.createElement("SPAN");
+          var fieldInputBox = document.createElement("INPUT");
+          var brElement = document.createElement("BR");
+          descripText.innerText = key;
+          fieldInputBox.value = value;
+          bodyDiv.appendChild(descripText);
+          bodyDiv.appendChild(fieldInputBox);
+          bodyDiv.appendChild(brElement);
+        },
+
+        populateBody: function () {
+          var obj = false;
+          try {obj = this.$.itemajax.jsonObj;} catch (err) {}
+          if (obj) {
+            for (var key in obj) {
+              var attrName = key;
+              this.createFieldInputBox(key, obj[key]);
+            }
+          }
+        },
+
+        populate: function () {
+          this.populateTitle();
+          this.populateBody();
+        }
+      });
+    })();
+  </script>
+</dom-module>

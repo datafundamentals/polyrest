@@ -1,0 +1,78 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="to-do">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h3>This is a proof-of concept workspace</h3>
+
+    <p>PolyRest is a conceptual proof of concept ONLY, and not intended as production code in it's
+      current form.</p>
+
+    <p>Perhaps analagous to PHPMyAdmin for MySQL, or to a lesser degree - Ruby on Rails or Grails, PolyRest asks the
+      question <strong><em>"What can I do with HATEOAS REST APIs,
+        without writing any table-specific code, and using Polymer as a front end for the Javascript?"</em></strong> If nothing else,
+      you can use some of the code as sample Polymer code for your own app.</p>
+
+    <h2>Pairing with Spring Data Rest and SpringBoot</h2>
+
+    <p>Spend a day and knock out a big, pre-populated REST API set, like the <a
+      href="http://172.99.79.10:8044/">12 REST API samples</a>
+      referenced here. Yes, a day should be sufficient, once
+      you learn that system. It's pretty easy, at least if you are a java developer.</p>
+
+    <p>Then use this tool for basic CRUD operations on your new API</p>
+
+    <p>You now have working CRUD for your basic data set, and you still haven't made a dent in your development budget!
+      So now you can focus all your efforts on the value-adds that really matter, not just getting the basic CRUD
+      operations working.</p>
+
+    <h1>TO DO:</h1>
+
+    <p>The TO DO list is shown below, as if there was an intent to complete it. Any assumption that this is the case,
+      and that <em>'someone'</em> actually intends to do so, may be purely imaginary.</p>
+    <ul>
+      <li>Properly clean up and commit this project</li>
+      <li>Add cutesy stuff like colors title etc</li>
+      <li>Deploy on rackspace carina or dreamhost or both</li>
+      <li>Wrap view and other list elements in tables to make them more visually pleasing</li>
+      <li>Wrap footer elements in tables to make them more visually pleasing</li>
+      <li>Need more REST APIs to call from than just this one</li>
+      <li>Need to test with other apis that this was not designed for - more as a curiosity.</li>
+      <li>Need to re-work sample REST APIs to use random words and not random text to yeild a more realistic use case
+      </li>
+      <li>Need to go back and write tests for everything done so far</li>
+      <li>Need to add capability to specify other than GET calls</li>
+      <li>Need to add capability to specify params as required? Or not? Not familiar enough with clean-url hateoas
+        design to know.
+      </li>
+      <li>There are some use cases where a textarea would be better than a textbox for input</li>
+      <li>Complete all functionality that requires buttons that I couldn't figure out before</li>
+      <li>Make search and refresh icons do something or get rid of them (on banner top right)</li>
+      <li>Add an incoming page for inputting the base url, instead of just hardcoding to one, or typing in the browser
+        url.
+      </li>
+      <li>Rename consumer page as "sample" for inputting the base url, instead of just hardcoding to one, or typing in
+        the browser url.
+      </li>
+      <li>There seems to be stale artifacts coming from somewhere that pollute or confused jsonObject generally. Or
+        something.
+      </li>
+      <li>Test off-line to see what does and does not work</li>
+      <li>Test copypasting generated source html and see how much of it is consumable directly</li>
+      <li>.</li>
+    </ul>
+    <p>Anything like css, or prettying up this app for visual features, is not even contemplated</p>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+      Polymer({
+        is: 'to-do'
+      });
+    })();
+  </script>
+</dom-module>

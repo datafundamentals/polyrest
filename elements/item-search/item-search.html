@@ -1,0 +1,91 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../item-hateoas/item-hateoas.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
+<dom-module id="item-search">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div><h5>REST API for <span>{{searchurl}}</span>:</h5></div>
+    <item-ajax
+      id="itemajax"
+      deslashedurl="{{searchurl}}"
+      on-response="populate">
+    </item-ajax>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'item-search',
+        properties: {
+          searchurl: {
+            type: String,
+            notify: true
+          },
+          titleName: {
+            type: String,
+            notify: true
+          }
+        },
+
+        populateTitle: function () {
+          var obj = false;
+          try {
+            obj = this.$.itemajax.jsonObj._embedded;
+            var bodyDiv = this.$.main;
+            bodyDiv.innerText = "";
+          } catch (err) {
+          }
+          if (obj) {
+            for (var key in obj) {
+              this.titleName = key;
+              break;
+            }
+          } else {
+            this.titleName = "No Data Found For This Link"
+          }
+          this.$.itemajax.titleDiv.innerText = this.titleName;
+        },
+
+        createSearchInputBox: function (key, value) {
+          var bodyDiv = this.$.itemajax.bodyDiv;
+          var descripText = document.createElement("SPAN");
+          var searchInputBox = document.createElement("INPUT");
+          var searchButton = document.createElement("BUTTON");
+          var brElement = document.createElement("BR");
+          descripText.innerText = key;
+          searchButton.setAttribute("something", value);
+          searchButton.innerText = "find";
+          bodyDiv.appendChild(descripText);
+          bodyDiv.appendChild(searchInputBox);
+          bodyDiv.appendChild(searchButton);
+          bodyDiv.appendChild(brElement);
+        },
+
+        populateBody: function () {
+          var obj = false;
+          try {
+            obj = this.$.itemajax.jsonObj._links;
+          } catch (err) {
+          }
+          if (obj) {
+            for (var key in obj) {
+              var attrName = key;
+              this.createSearchInputBox(key, obj[key].href);
+            }
+          }
+        },
+
+        populate: function () {
+          this.populateTitle()
+          this.populateBody()
+        },
+      });
+    })();
+  </script>
+</dom-module>

@@ -1,0 +1,76 @@
+<!--
+For development work only. Delete after everything downstream works
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="cons-umer">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Sample Crud Operations</h2>
+
+    <p>Using root of http://172.99.79.10:8044/</p>
+
+    <p>If you start with the <a data-route="itemlist-section" href="{{alist()}}"> <span>Item List</span>
+    </a> you can navigate through every CRUD operation of every table, from this one point.</p>
+    <a data-route="itemlist-section" href="{{alist()}}">
+      <iron-icon icon="apps"></iron-icon>
+      <span>Item List:</span>
+    </a>
+    <br>
+    <br>
+
+    <p>Or, if you are just impatient, and you just want to sample one each of the other three types of views:.</p>
+    <a data-route="itemsearch-section" href="{{search()}}">
+      <iron-icon icon="search"></iron-icon>
+      <span>Item Search:</span>
+    </a><br>
+    <a data-route="itemselect-section" href="{{select()}}">
+      <iron-icon icon="list"></iron-icon>
+      <span>Item Select:</span>
+    </a><br>
+    <a data-route="itemview-section" href="{{view()}}">
+      <iron-icon icon="view-quilt"></iron-icon>
+      <span>Item View:</span>
+    </a>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'cons-umer',
+        search: function () {
+          var url = "http://172.99.79.10:8044/projectphase/search";
+          var base = "/itemsearch/";
+          return this.mod(base, url);
+        },
+        alist: function () {
+          var url = "http://172.99.79.10:8044";
+          var base = "/itemlist/";
+          return this.mod(base, url);
+        },
+        select: function () {
+          var url = "http://172.99.79.10:8044/task?page=2";
+          var base = "/itemselect/";
+          return this.mod(base, url);
+        },
+        view: function () {
+          var url = "http://172.99.79.10:8044/scoremunger/1";
+          var base = "/itemview/";
+          return this.mod(base, url);
+        },
+        mod: function (base, url) {
+          var target = url;
+          var newchar = '_';
+          target = target.split('/').join(newchar);
+          return base + encodeURIComponent(target);
+        }
+      });
+    })();
+  </script>
+</dom-module>

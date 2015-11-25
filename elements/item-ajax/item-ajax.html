@@ -1,0 +1,90 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../item-hateoas/item-hateoas.html">
+
+<dom-module id="item-ajax">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <iron-ajax
+      id="ajax"
+      auto="false"
+      handle-as="json"
+      on-response="_handleResponse"
+      on-error="_handleError"
+      debounce-duration="300"></iron-ajax>
+    <h2 id="title"></h2>
+    <hr>
+    <div id="main"></div>
+    <hr>
+    <div id="foot"></div>
+    <hr>
+    <paper-textarea id="tarea" label="JSON from REST API, furnished to corroborate above:"
+                    value="No JSON YET"></paper-textarea>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'item-ajax',
+
+        behaviors: [DfHateoas.DecodeUrl, DfHateoas.HandleResponse, DfHateoas.HandleError],
+
+        properties: {
+          deslashedurl: {
+            type: String,
+            notify: true,
+            observer: 'entryPoint'
+          },
+          jsonObj: {
+            type: Object,
+            notify: true
+          },
+          bodyDiv: {
+            type: Function,
+            value: function() {
+              return this.$.main;
+            }
+          },
+          titleDiv: {
+            type: Function,
+            value: function() {
+              return this.$.title;
+            }
+          },
+          footerDiv: {
+            type: Function,
+            value: function() {
+              return this.$.foot;
+            }
+          }
+        }
+        ,
+        _handleResponse: function (data) {
+          if (data.detail.response) {
+            DfHateoas.HandleResponse._handleResponse(data);
+            this.jsonObj = DfHateoas.HandleResponse.jsonObject;
+            var jsonTextArea = this.$.tarea;
+            jsonTextArea.value = DfHateoas.HandleResponse.jsonString;
+            this.fire('response');
+          }
+        }
+        ,
+        _handleError: function (data) {
+          DfHateoas.HandleError._handleError(data);
+        },
+        entryPoint: function(){
+          DfHateoas.DecodeUrl.decodeUrl(this.deslashedurl);
+          if (DfHateoas.DecodeUrl.usableUrl) {
+            this.$.ajax.url = DfHateoas.DecodeUrl.usableUrl;
+          }
+        }
+
+      });
+    })();
+  </script>
+</dom-module>
