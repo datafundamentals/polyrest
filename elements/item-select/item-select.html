@@ -32,7 +32,7 @@
           var obj = this.$.itemajax.jsonObj._embedded;
           if (obj) {
             for (var key in obj) {
-              this.$.itemajax.titleDiv.innerText  = key;
+              this.$.itemajax.titleDiv.innerText = key;
               this.titleName = key;
               break;
             }
@@ -44,13 +44,13 @@
           var recordCount = false
           try {
             recordCount = this.$.itemajax.jsonObj.page.size;
-          }catch(err){
+          } catch (err) {
             recordCount = 1000;
           }
           var firstRecord = false;
           try {
             firstRecord = this.$.itemajax.jsonObj._embedded[(this.titleName)][0];
-            console.log("TRYING "+ firstRecord);
+            console.log("TRYING " + firstRecord);
           } catch (err) {
           }
           this.tableHeads = [];
@@ -79,33 +79,27 @@
             var tableBody = document.createElement('TBODY');
             table.appendChild(tableBody);
             for (var i = 0; i < recordCount; i++) {
-              var tr = document.createElement('TR');
-              tableBody.appendChild(tr);
               var record = this.$.itemajax.jsonObj._embedded[(this.titleName)][i];
-              var link = record._links.self.href;
-              link = DfHateoas.DecodeUrl.encodeUrl("/itemview/",link);
-              var values = [];
-              for (var key in record) {
-                var attrName = key;
-                values.push(record[key]);
-              }
-              for (var j = 0; j < 3; j++) {
-                var td = document.createElement('TD');
-                td.width = '75';
-                var value = values[j];
-                if (value.length > 12) {
-                  value = value.substring(0, 12);
+              if (record) {
+                var tr = document.createElement('TR');
+                tableBody.appendChild(tr);
+                var values = [];
+                for (var key in record) {
+                  var attrName = key;
+                  values.push(record[key]);
                 }
-                td.appendChild(document.createTextNode(value));
-                tr.appendChild(td);
+                for (var j = 0; j < 3; j++) {
+                  var td = document.createElement('TD');
+                  td.width = '75';
+                  var value = values[j];
+                  if (value.length > 12) {
+                    value = value.substring(0, 12);
+                  }
+                  td.appendChild(document.createTextNode(value));
+                  tr.appendChild(td);
+                }
+                this.addItemViewLink(tr, record);
               }
-              var td = document.createElement('TD');
-              td.width = '50';
-              var aref = document.createElement('A');
-              aref.setAttribute("href", link);
-              aref.innerText = "view";
-              td.appendChild(aref);
-              tr.appendChild(td);
             }
             tableDiv.appendChild(table);
           }
@@ -155,7 +149,28 @@
             footerDiv.appendChild(link);
             footerDiv.appendChild(space);
           }
-        },
+        }
+
+        ,
+        addItemViewLink: function (tr, record) {
+          var link = "";
+          try {
+            link = record._links.self.href;
+            link = DfHateoas.DecodeUrl.encodeUrl("/itemview/", link);
+          } catch (err) {
+            if (record) {
+              console.log("UNABLE TO PROCESS LINK:\n" + JSON.stringify(record));
+            }
+          }
+          var td = document.createElement('TD');
+          td.width = '50';
+          var aref = document.createElement('A');
+          aref.setAttribute("href", link);
+          aref.innerText = "view";
+          td.appendChild(aref);
+          tr.appendChild(td);
+        }
+        ,
         populate: function () {
           this.populateTitle();
           this.populateTable();
@@ -164,6 +179,7 @@
 
       })
       ;
-    })();
+    })
+    ();
   </script>
 </dom-module>
