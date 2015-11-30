@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../item-hateoas/item-hateoas.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../item-update-bar/item-update-bar.html">
 
 <dom-module id="item-view">
   <template>
@@ -9,13 +10,12 @@
         display: block;
       }
     </style>
-    <div><h5>REST API for <span>{{viewurl}}</span>:</h5></div>
+    <item-update-bar on-update="updateRecord" on-delete="deleteRecord"></item-update-bar>
     <item-ajax
       id="itemajax"
       deslashedurl="{{viewurl}}"
       on-response="populate">
     </item-ajax>
-
   </template>
   <script>
     (function () {
@@ -35,34 +35,23 @@
           }
         },
         populateTitle: function () {
-          var obj = false;
-          try {
-            obj = DfHateoas.DecodeUrl.usableUrl;
-          } catch (err) {
-          }
-          if (obj) {
-            this.titleHead = this.extractTitle(obj);
-          } else {
-            this.titleHead = "No Data Found For This Link"
-          }
+          this.$.itemajax.titleDiv.innerText = this.extractTitle(this.$.itemajax.deslashedurl);
         },
 
-        extractTitle: function(url){
-          var value = ""+url;
-          var previousValue = "";
-          while(value.indexOf("/")>-1){
-            previousValue = value;
-            value = value.substring(value.indexOf("/")+1, value.length);
-          }
-          return previousValue;
+        extractTitle: function (url) {
+          var target = "" + url;
+          target = target.split('_');
+          var id = target.pop();
+          var name = target.pop();
+          return name + " (id=" + id + ")";
         },
 
         createFieldInputBox: function (key, value) {
           if (key.startsWith("_")) {
             return;
           }
-          var bodyDiv = this.$.itemajax.titleDiv;
-          var descripText = document.createElement("SPAN");
+          var bodyDiv = this.$.itemajax.bodyDiv;
+          var descripText = document.createElement("H4");
           var fieldInputBox = document.createElement("paper-textarea");
           var brElement = document.createElement("BR");
           descripText.innerText = key;
@@ -73,8 +62,13 @@
         },
 
         populateBody: function () {
+          this.$.itemajax.bodyDiv.innerHTML = "";
           var obj = false;
-          try {obj = this.$.itemajax.jsonObj;} catch (err) {}
+          try {
+            obj = this.$.itemajax.jsonObj;
+          } catch (err) {
+            console.log("APPEARS TO BE A PROBLEM WITH " + this.viewUrl);
+          }
           if (obj) {
             for (var key in obj) {
               var attrName = key;
@@ -82,10 +76,22 @@
             }
           }
         },
+        populateFooter: function () {
+          // no op because couldn't figure out how to make on-create
+          // or on-update work from an element created with javascript
+          // so created above, in html argh
+        },
 
         populate: function () {
           this.populateTitle();
           this.populateBody();
+          this.populateFooter();
+        },
+        updateRecord: function () {
+          console.log("SOME KIND OF UPDATE");
+        },
+        deleteRecord: function () {
+          console.log("SOME KIND OF DELETE");
         }
       });
     })();

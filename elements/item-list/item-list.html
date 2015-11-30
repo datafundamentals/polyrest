@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../item-hateoas/item-hateoas.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 
 <dom-module id="item-list">
@@ -37,7 +36,7 @@
           this.populateBody();
         },
         createFieldInputBox: function (key, value) {
-          if (key.startsWith("_")) {
+          if (key.startsWith("_")||key.startsWith("profile")) {
             return;
           }
           var bodyDiv = this.$.itemajax.bodyDiv;
@@ -59,14 +58,14 @@
           if (obj) {
             for (var key in obj) {
               var attrName = key;
-              var linkText = DfHateoas.DecodeUrl.encodeUrl("/itemselect/", obj[key].href);
+              var linkText = this.$.itemajax.specialEncodeUrl("/itemselect/", obj[key].href);
               this.createFieldInputBox(key, linkText);
             }
           }
         },
 
         populateTitle: function () {
-          this.titleHead = "REST APIS found at " + DfHateoas.DecodeUrl.usableUrl;
+          this.titleHead = "REST APIS found at " + this.listurl;
         }
       });
     })();

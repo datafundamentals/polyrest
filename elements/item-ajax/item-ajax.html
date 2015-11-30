@@ -1,6 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../item-hateoas/item-hateoas.html">
 
 <dom-module id="item-ajax">
   <template>
@@ -32,56 +31,199 @@
       Polymer({
         is: 'item-ajax',
 
-        behaviors: [DfHateoas.DecodeUrl, DfHateoas.HandleResponse, DfHateoas.HandleError],
-
         properties: {
           deslashedurl: {
             type: String,
             notify: true,
             observer: 'entryPoint'
           },
-          jsonObj: {
+          jsonObject: {
             type: Object,
+            notify: true
+          },
+          viewType: {
+            type: String,
             notify: true
           },
           bodyDiv: {
             type: Function,
-            value: function() {
+            value: function () {
               return this.$.main;
             }
           },
           titleDiv: {
             type: Function,
-            value: function() {
+            value: function () {
               return this.$.title;
             }
           },
           footerDiv: {
             type: Function,
-            value: function() {
+            value: function () {
               return this.$.foot;
+            }
+          }
+        },
+        specialEncodeUrl: function (base, url) {
+          var target = url;
+          var newchar = '_';
+          target = target.split('/').join(newchar);
+          return base + encodeURIComponent(target);
+        }
+        ,
+        _handleResponse: function (data) {
+          this.jsonObj = null;
+          this.viewType = null;
+          if (this.deslashedurl) {
+            if (data.detail.response) {
+              this.jsonObj = data.detail.response;
+              this.viewType = this._computeViewType;
+              var jsonTextArea = this.$.tarea;
+              jsonTextArea.value = JSON.stringify(this.jsonObj, null, '\t');
+              this.fire('response');
             }
           }
         }
         ,
-        _handleResponse: function (data) {
-          if (data.detail.response) {
-            DfHateoas.HandleResponse._handleResponse(data);
-            this.jsonObj = DfHateoas.HandleResponse.jsonObject;
-            var jsonTextArea = this.$.tarea;
-            jsonTextArea.value = DfHateoas.HandleResponse.jsonString;
-            this.fire('response');
+        _handleError: function (data) {
+//          DfHateoas.HandleError._handleError(data);
+        },
+        entryPoint: function () {
+          this.decodeUrl(this.deslashedurl);
+        },
+        decodeUrl: function (incomingUrl) {
+          if (incomingUrl) {
+            var target = incomingUrl;
+            var newchar = '/';
+            target = target.split('_').join(newchar);
+            target = decodeURIComponent(target);
+            if (target && target.startsWith("http")) {
+              this.$.ajax.url = target;
+            } else {
+              this.$.ajax.url = 'http://' + target;
+            }
+          }
+        },
+        _computeViewType: function () {
+          this.viewType = "other";
+          var keys = this._keys(this.jsonObject);
+          var hasLinks = this._contains("_links", keys);
+          var hasSearch = this._hasLinksSearch();
+          var hasEmbedded = this._contains("_embedded", keys);
+          var hasPage = this._contains("page", keys);
+          var hasNext = this._hasLinksNext();
+          var hasPrev = this._hasLinksPrev();
+          var hasLinksProfile = this._hasLinksProfile();
+          if (hasLinks && hasLinksProfile && keys.length == 1) {
+            this.viewType = "rootView"
+          }
+          if (hasLinks && hasSearch && hasEmbedded && hasPage && hasNext && hasPrev) {
+            return "middleItems";
+          }
+          if (hasLinks && hasSearch && hasEmbedded && hasPage && hasNext) {
+            this.viewType = "beginItems";
+          }
+          if (hasLinks && hasSearch && hasEmbedded && hasPage && hasPrev) {
+            this.viewType = "endItems";
+          }
+          if (hasLinks && !hasSearch && !hasEmbedded && !hasPage && !hasLinksProfile && keys.length > 1) {
+            this.viewType = "itemView";
+          }
+          if (hasLinks && keys.length == 1) {
+            this.viewType = "searchView";
           }
         }
         ,
-        _handleError: function (data) {
-          DfHateoas.HandleError._handleError(data);
-        },
-        entryPoint: function(){
-          DfHateoas.DecodeUrl.decodeUrl(this.deslashedurl);
-          if (DfHateoas.DecodeUrl.usableUrl) {
-            this.$.ajax.url = DfHateoas.DecodeUrl.usableUrl;
+
+        _keys: function (obj) {
+          var keys = [];
+          if (obj === undefined || obj == null) {
+            return null;
           }
+          for (var key in obj) {
+            var attrName = key;
+            keys.push(key);
+          }
+          return keys;
+        }
+        ,
+
+        _hasLinksProfile: function () {
+          if (this.jsonObject === undefined || this.jsonObject == null) {
+            return false;
+          }
+          if (this.jsonObject._links != null
+            && this.jsonObject._links.profile != undefined
+            && this.jsonObject._links.profile.href != undefined) {
+            return true;
+          }
+          return false;
+        }
+        ,
+
+        _hasLinksSelf: function () {
+          if (this.jsonObject === undefined || this.jsonObject == null) {
+            return false;
+          }
+          if (this.jsonObject._links != null
+            && this.jsonObject._links.self != undefined
+            && this.jsonObject._links.self.href != undefined) {
+            return true;
+          }
+          return false;
+        }
+        ,
+
+        _hasLinksNext: function () {
+          if (this.jsonObject === undefined || this.jsonObject == null) {
+            return false;
+          }
+          if (this.jsonObject._links != null
+            && this.jsonObject._links.next != undefined
+            && this.jsonObject._links.next.href != undefined) {
+            return true;
+          }
+          return false;
+        }
+        ,
+
+        _hasLinksPrev: function () {
+          if (this.jsonObject === undefined || this.jsonObject == null) {
+            return false;
+          }
+          if (this.jsonObject._links != null
+            && this.jsonObject._links.prev != undefined
+            && this.jsonObject._links.prev.href != undefined) {
+            return true;
+          }
+          return false;
+        }
+        ,
+
+        _hasLinksSearch: function () {
+          if (this.jsonObject === undefined || this.jsonObject == null) {
+            return false;
+          }
+          if (this.jsonObject._links != null
+            && this.jsonObject._links.search != undefined
+            && this.jsonObject._links.search.href != undefined) {
+            return true;
+          }
+          return false;
+        }
+        ,
+
+        _contains: function (obj, arr) {
+          if (obj === undefined || obj === null || arr === undefined || arr == null) {
+            return false;
+          }
+          var i = arr.length;
+          while (i--) {
+            if (arr[i] === obj) {
+              return true;
+            }
+          }
+          return false;
         }
 
       });

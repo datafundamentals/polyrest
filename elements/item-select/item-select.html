@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../item-hateoas/item-hateoas.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 
 <dom-module id="item-select">
@@ -9,6 +8,7 @@
         display: block;
       }
     </style>
+    <item-create-bar on-create="createRecord"></item-create-bar>
     <item-ajax
       id="itemajax"
       deslashedurl="{{selecturl}}"
@@ -27,6 +27,7 @@
             notify: true
           }
         },
+
 
         populateTitle: function () {
           var obj = this.$.itemajax.jsonObj._embedded;
@@ -50,7 +51,6 @@
           var firstRecord = false;
           try {
             firstRecord = this.$.itemajax.jsonObj._embedded[(this.titleName)][0];
-            console.log("TRYING " + firstRecord);
           } catch (err) {
           }
           this.tableHeads = [];
@@ -156,10 +156,10 @@
           var link = "";
           try {
             link = record._links.self.href;
-            link = DfHateoas.DecodeUrl.encodeUrl("/itemview/", link);
+            link = this.$.itemajax.specialEncodeUrl("/itemview/", link);
           } catch (err) {
             if (record) {
-              console.log("UNABLE TO PROCESS LINK:\n" + JSON.stringify(record));
+              console.log("UNABLE TO PROCESS LINK:\n" + JSON.stringify(record)+ "\nERR\n"+ err);
             }
           }
           var td = document.createElement('TD');
@@ -175,6 +175,10 @@
           this.populateTitle();
           this.populateTable();
           this.populateFooter();
+        }
+        ,
+        createRecord: function () {
+          console.log("SOME KIND OF CREATE");
         }
 
       })
