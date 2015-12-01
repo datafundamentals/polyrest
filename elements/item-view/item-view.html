@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../item-update-bar/item-update-bar.html">
 
@@ -51,13 +52,31 @@
             return;
           }
           var bodyDiv = this.$.itemajax.bodyDiv;
-          var descripText = document.createElement("H4");
+          var descripText = document.createElement("H3");
           var fieldInputBox = document.createElement("paper-textarea");
           var brElement = document.createElement("BR");
           descripText.innerText = key;
           fieldInputBox.value = value;
           bodyDiv.appendChild(descripText);
           bodyDiv.appendChild(fieldInputBox);
+          bodyDiv.appendChild(brElement);
+        },
+
+        createCheckBox: function (key, value) {
+          if (key.startsWith("_")) {
+            return;
+          }
+          var bodyDiv = this.$.itemajax.bodyDiv;
+          var descripText = document.createElement("H3");
+          var checkBox = document.createElement("paper-checkbox");
+          if(value){
+            checkBox.setAttribute('checked', true);
+          }
+          var brElement = document.createElement("BR");
+          descripText.innerText = key;
+//          fieldInputBox.value = value;
+          bodyDiv.appendChild(descripText);
+          bodyDiv.appendChild(checkBox);
           bodyDiv.appendChild(brElement);
         },
 
@@ -72,7 +91,11 @@
           if (obj) {
             for (var key in obj) {
               var attrName = key;
-              this.createFieldInputBox(key, obj[key]);
+              if (obj[key] === true || obj[key] === false) {
+                this.createCheckBox(key, obj[key]);
+              } else {
+                this.createFieldInputBox(key, obj[key]);
+              }
             }
           }
         },

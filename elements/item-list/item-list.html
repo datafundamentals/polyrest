@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../slash-handler/slash-handler.html">
 
 <dom-module id="item-list">
   <template>
@@ -20,6 +21,8 @@
 
       Polymer({
         is: 'item-list',
+
+        behaviors: [SlashHandler.PassUrl],
 
         properties: {
           listurl: {
@@ -58,7 +61,8 @@
           if (obj) {
             for (var key in obj) {
               var attrName = key;
-              var linkText = this.$.itemajax.specialEncodeUrl("/itemselect/", obj[key].href);
+//              var linkText = this.$.itemajax.specialEncodeUrl("/itemselect/", obj[key].href);
+              var linkText = SlashHandler.PassUrl.encodeUrl("/itemselect/",obj[key].href);
               this.createFieldInputBox(key, linkText);
             }
           }

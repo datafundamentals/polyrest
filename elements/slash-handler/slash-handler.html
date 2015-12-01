@@ -1,0 +1,37 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="slash-handler">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+  <script>
+    var SlashHandler = SlashHandler || {};
+
+    SlashHandler.PassUrl = {
+      encodeUrl: function (base, url) {
+        var target = url;
+        var newchar = '_';
+        target = target.split('/').join(newchar);
+        return base + encodeURIComponent(target);
+      },
+      decodeUrl: function (incomingUrl) {
+        if (incomingUrl) {
+          this.encodedUrl = incomingUrl;
+          var target = incomingUrl;
+          var newchar = '/';
+          target = target.split('_').join(newchar);
+          target = decodeURIComponent(target);
+          if (target && target.startsWith("http")) {
+            return target;
+          } else {
+            return 'http://' + target;
+          }
+        }
+      }
+    }
+  </script>
+</dom-module>

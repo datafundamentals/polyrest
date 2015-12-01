@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../slash-handler/slash-handler.html">
 
 <dom-module id="item-ajax">
   <template>
@@ -30,6 +31,8 @@
 
       Polymer({
         is: 'item-ajax',
+
+        behaviors: [SlashHandler.PassUrl],
 
         properties: {
           deslashedurl: {
@@ -64,13 +67,6 @@
             }
           }
         },
-        specialEncodeUrl: function (base, url) {
-          var target = url;
-          var newchar = '_';
-          target = target.split('/').join(newchar);
-          return base + encodeURIComponent(target);
-        }
-        ,
         _handleResponse: function (data) {
           this.jsonObj = null;
           this.viewType = null;
@@ -89,20 +85,8 @@
 //          DfHateoas.HandleError._handleError(data);
         },
         entryPoint: function () {
-          this.decodeUrl(this.deslashedurl);
-        },
-        decodeUrl: function (incomingUrl) {
-          if (incomingUrl) {
-            var target = incomingUrl;
-            var newchar = '/';
-            target = target.split('_').join(newchar);
-            target = decodeURIComponent(target);
-            if (target && target.startsWith("http")) {
-              this.$.ajax.url = target;
-            } else {
-              this.$.ajax.url = 'http://' + target;
-            }
-          }
+          this.$.ajax.url = SlashHandler.PassUrl.decodeUrl(this.deslashedurl);
+
         },
         _computeViewType: function () {
           this.viewType = "other";

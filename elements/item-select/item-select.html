@@ -156,7 +156,7 @@
           var link = "";
           try {
             link = record._links.self.href;
-            link = this.$.itemajax.specialEncodeUrl("/itemview/", link);
+            link =  SlashHandler.PassUrl.encodeUrl("/itemview/", link);
           } catch (err) {
             if (record) {
               console.log("UNABLE TO PROCESS LINK:\n" + JSON.stringify(record)+ "\nERR\n"+ err);
