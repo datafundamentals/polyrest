@@ -36,7 +36,7 @@ For development work only. Delete after everything downstream works
       <iron-icon icon="view-quilt"></iron-icon>
       <span>Item View:</span>
     </a><br>
-    <a data-route="itemview-section" href="{{view()}}">
+    <a data-route="itemcreate-section" href="{{create()}}">
       <iron-icon icon="create"></iron-icon>
       <span>Create Item:</span>
     </a>
@@ -64,6 +64,11 @@ For development work only. Delete after everything downstream works
         view: function () {
           var url = "http://172.99.79.10:8156/scoremunger/1";
           return "/itemview/" + SlashHandler.PassUrl.encodeUrl(url);
+        },
+        create: function () {
+          var url = "http://172.99.79.10:8156/sideeffect";
+          var schemaspec = "%7B%22name%22%3A%7B%22valueType%22%3A%22shortText%22%7D%2C%22descrip%22%3A%7B%22valueType%22%3A%22longText%22%7D%2C%22abrv%22%3A%7B%22valueType%22%3A%22shortText%22%7D%2C%22manadatory%22%3A%7B%22valueType%22%3A%22null%22%7D%2C%22authorId%22%3A%7B%22valueType%22%3A%22integer%22%7D%2C%22effectKey%22%3A%7B%22valueType%22%3A%22shortText%22%7D%2C%22groupKey%22%3A%7B%22valueType%22%3A%22shortText%22%7D%2C%22nameCompliant%22%3A%7B%22valueType%22%3A%22null%22%7D%2C%22orGroupName%22%3A%7B%22valueType%22%3A%22boolean%22%7D%2C%22saturationScored%22%3A%7B%22valueType%22%3A%22null%22%7D%2C%22orGroupMember%22%3A%7B%22valueType%22%3A%22boolean%22%7D%2C%22orGroupTitle%22%3A%7B%22valueType%22%3A%22null%22%7D%7D";
+          return "/itemcreate/" + SlashHandler.PassUrl.encodeUrl(url)+"/"+ SlashHandler.PassUrl.encodeUrl(schemaspec);
         }
       });
     })();

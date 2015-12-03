@@ -46,10 +46,12 @@
         populateTable: function () {
           var records = this.$.itemajax.jsonObj._embedded;
           var schema = SchemaGuesser.guessFromSelectObject(records);
+          console.log(encodeURIComponent(JSON.stringify(schema)));
+
           for (var myobj in schema) {
             var myValueType = schema[myobj];
             if (myValueType && myValueType["valueType"]) {
-              console.log(">>>> " + myobj + ".valueType=" + myValueType["valueType"]);
+//              console.log(">>>> " + myobj + ".valueType=" + myValueType["valueType"]);
             }
           }
           var recordCount = false

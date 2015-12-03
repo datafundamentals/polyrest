@@ -18,20 +18,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
     </style>
-    <div>Hello </span></div>
+    <!--<div>Hello </div>-->
+    <div>Hello <span>{{createurl}}</span> BBBBBBBB <span>{{schemaspec}}</span></div>
   </template>
   <script>
   (function() {
     'use strict';
 
     Polymer({
-      is: 'item-create',
-
-      behaviors: [SchemaGuesser],
-
-      ready: function (){
-          console.log(SchemaGuesser.guessFromSlashEncodedUrl("http%3A__172.99.79.10%3A8156_scoremunger"));
-      }
+      is: 'item-create'
     });
   })();
   </script>

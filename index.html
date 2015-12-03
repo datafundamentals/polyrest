@@ -80,7 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </a>
         <a data-route="consumer-section" href="/consumer/" on-click="onDataRouteClick">
           <iron-icon icon="apps"></iron-icon>
-          <span>Try It</span>
+          <span>Sample</span>
         </a>
       </paper-menu>
 
@@ -153,6 +153,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <section data-route="itemselect-section">
             <paper-material elevation="1">
               <item-select selecturl={{params.selecturl}}></item-select>
+            </paper-material>
+          </section>
+
+          <section data-route="itemcreate-section">
+            <paper-material elevation="1">
+              <item-create createurl={{params.createurl}} schemaspec={{params.schemaspec}} ></item-create>
             </paper-material>
           </section>
 
