@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../schema-guesser/schema-guesser.html">
 
 <dom-module id="item-create">
   <template>
@@ -17,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
     </style>
-    <div>Hello from <span>{{foo}}</span></div>
+    <div>Hello </span></div>
   </template>
   <script>
   (function() {
@@ -26,12 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'item-create',
 
-      properties: {
-        foo: {
-          type: String,
-          value: 'item-create',
-          notify: true
-        }
+      behaviors: [SchemaGuesser],
+
+      ready: function (){
+          console.log(SchemaGuesser.guessFromSlashEncodedUrl("http%3A__172.99.79.10%3A8156_scoremunger"));
       }
     });
   })();

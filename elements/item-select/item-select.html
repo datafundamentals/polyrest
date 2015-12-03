@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../schema-guesser/schema-guesser.html">
 
 <dom-module id="item-select">
   <template>
@@ -28,6 +29,7 @@
           }
         },
 
+        behaviors: [SchemaGuesser],
 
         populateTitle: function () {
           var obj = this.$.itemajax.jsonObj._embedded;
@@ -42,6 +44,14 @@
           }
         },
         populateTable: function () {
+          var records = this.$.itemajax.jsonObj._embedded;
+          var schema = SchemaGuesser.guessFromSelectObject(records);
+          for (var myobj in schema) {
+            var myValueType = schema[myobj];
+            if (myValueType && myValueType["valueType"]) {
+              console.log(">>>> " + myobj + ".valueType=" + myValueType["valueType"]);
+            }
+          }
           var recordCount = false
           try {
             recordCount = this.$.itemajax.jsonObj.page.size;
@@ -50,7 +60,7 @@
           }
           var firstRecord = false;
           try {
-            firstRecord = this.$.itemajax.jsonObj._embedded[(this.titleName)][0];
+            firstRecord = records[(this.titleName)][0];
           } catch (err) {
           }
           this.tableHeads = [];
@@ -79,7 +89,7 @@
             var tableBody = document.createElement('TBODY');
             table.appendChild(tableBody);
             for (var i = 0; i < recordCount; i++) {
-              var record = this.$.itemajax.jsonObj._embedded[(this.titleName)][i];
+              var record = records[(this.titleName)][i];
               if (record) {
                 var tr = document.createElement('TR');
                 tableBody.appendChild(tr);
@@ -156,10 +166,10 @@
           var link = "";
           try {
             link = record._links.self.href;
-            link =  SlashHandler.PassUrl.encodeUrl("/itemview/", link);
+            link = "/itemview/" + SlashHandler.PassUrl.encodeUrl(link);
           } catch (err) {
             if (record) {
-              console.log("UNABLE TO PROCESS LINK:\n" + JSON.stringify(record)+ "\nERR\n"+ err);
+              console.log("UNABLE TO PROCESS LINK:\n" + JSON.stringify(record) + "\nERR\n" + err);
             }
           }
           var td = document.createElement('TD');
@@ -179,6 +189,10 @@
         ,
         createRecord: function () {
           console.log("SOME KIND OF CREATE");
+        },
+        ready: function () {
+//          console.log(SchemaGuesser.guessFromSlashEncodedUrl("http%3A__172.99.79.10%3A8156_scoremunger"));
+//          console.log(SchemaGuesser.guessFromSelectObject());
         }
 
       })

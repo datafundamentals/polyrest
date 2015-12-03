@@ -3,6 +3,7 @@ For development work only. Delete after everything downstream works
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../slash-handler/slash-handler.html">
 
 <dom-module id="cons-umer">
   <template>
@@ -34,39 +35,35 @@ For development work only. Delete after everything downstream works
     <a data-route="itemview-section" href="{{view()}}">
       <iron-icon icon="view-quilt"></iron-icon>
       <span>Item View:</span>
+    </a><br>
+    <a data-route="itemview-section" href="{{view()}}">
+      <iron-icon icon="create"></iron-icon>
+      <span>Create Item:</span>
     </a>
   </template>
   <script>
     (function () {
       'use strict';
 
+      behaviors: [SlashHandler.PassUrl],
+
       Polymer({
         is: 'cons-umer',
         search: function () {
           var url = "http://172.99.79.10:8156/projectphase/search";
-          var base = "/itemsearch/";
-          return this.mod(base, url);
+          return "/itemsearch/" + SlashHandler.PassUrl.encodeUrl(url);
         },
         alist: function () {
           var url = "http://172.99.79.10:8156";
-          var base = "/itemlist/";
-          return this.mod(base, url);
+          return "/itemlist/" + SlashHandler.PassUrl.encodeUrl(url);
         },
         select: function () {
           var url = "http://172.99.79.10:8156/task?page=2";
-          var base = "/itemselect/";
-          return this.mod(base, url);
+          return "/itemselect/" +SlashHandler.PassUrl.encodeUrl(url);
         },
         view: function () {
           var url = "http://172.99.79.10:8156/scoremunger/1";
-          var base = "/itemview/";
-          return this.mod(base, url);
-        },
-        mod: function (base, url) {
-          var target = url;
-          var newchar = '_';
-          target = target.split('/').join(newchar);
-          return base + encodeURIComponent(target);
+          return "/itemview/" + SlashHandler.PassUrl.encodeUrl(url);
         }
       });
     })();
