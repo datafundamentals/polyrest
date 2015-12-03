@@ -9,7 +9,7 @@
         display: block;
       }
     </style>
-    <item-create-bar on-create="createRecord"></item-create-bar>
+    <item-create-bar id="createbar" on-create="createRecord"></item-create-bar>
     <item-ajax
       id="itemajax"
       deslashedurl="{{selecturl}}"
@@ -24,6 +24,10 @@
         is: 'item-select',
         properties: {
           titleName: {
+            type: String,
+            notify: true
+          },
+          schemaencoded: {
             type: String,
             notify: true
           }
@@ -46,8 +50,7 @@
         populateTable: function () {
           var records = this.$.itemajax.jsonObj._embedded;
           var schema = SchemaGuesser.guessFromSelectObject(records);
-          console.log(encodeURIComponent(JSON.stringify(schema)));
-
+          this.schemaencoded = encodeURIComponent(JSON.stringify(schema));
           for (var myobj in schema) {
             var myValueType = schema[myobj];
             if (myValueType && myValueType["valueType"]) {
@@ -190,11 +193,13 @@
         }
         ,
         createRecord: function () {
-          console.log("SOME KIND OF CREATE");
-        },
-        ready: function () {
-//          console.log(SchemaGuesser.guessFromSlashEncodedUrl("http%3A__172.99.79.10%3A8156_scoremunger"));
-//          console.log(SchemaGuesser.guessFromSelectObject());
+          var BASE_URL = new URL('./', document.location.href).href;
+          var select = this.selecturl;
+          if(select.indexOf("?")>0){
+            select = select.substring(0, select.indexOf("?"));
+          }
+          window.location = BASE_URL + "#!/itemcreate/"+ select+ "/"+ this.schemaencoded;
+          window.location.reload();
         }
 
       })

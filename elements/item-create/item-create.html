@@ -1,15 +1,4 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../schema-guesser/schema-guesser.html">
 
 <dom-module id="item-create">
   <template>
@@ -19,15 +8,117 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     <!--<div>Hello </div>-->
-    <div>Hello <span>{{createurl}}</span> BBBBBBBB <span>{{schemaspec}}</span></div>
+    <div>Hello <span>{{createurl}}</span></div>
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function () {
+      'use strict';
 
-    Polymer({
-      is: 'item-create'
-    });
-  })();
+      Polymer({
+        is: 'item-create',
+
+        properties: {
+          createurl: {
+            type: String,
+            notify: true
+          },
+          schemaspec: {
+            type: String,
+            notify: true,
+            observer: 'blah'
+          },
+          schemaObject: {
+            type: Object,
+            notify: true
+          },
+          titleName: {
+            type: String,
+            notify: true
+          }
+        },
+        blah: function () {
+          this.schemaObject = JSON.parse(this.schemaspec);
+          console.log(JSON.stringify(this.schemaObject));
+        },
+        populateTitle: function () {
+          this.$.itemajax.titleDiv.innerText = this.extractTitle(this.$.itemajax.deslashedurl);
+        },
+
+        extractTitle: function (url) {
+          var target = "" + url;
+          target = target.split('_');
+          var id = target.pop();
+          var name = target.pop();
+          return name + " (id=" + id + ")";
+        },
+
+        createFieldInputBox: function (key, value) {
+          if (key.startsWith("_")) {
+            return;
+          }
+          var bodyDiv = this.$.itemajax.bodyDiv;
+          var descripText = document.createElement("H3");
+          var fieldInputBox = document.createElement("paper-textarea");
+          var brElement = document.createElement("BR");
+          descripText.innerText = key;
+          fieldInputBox.value = value;
+          bodyDiv.appendChild(descripText);
+          bodyDiv.appendChild(fieldInputBox);
+          bodyDiv.appendChild(brElement);
+        },
+
+        createCheckBox: function (key, value) {
+          if (key.startsWith("_")) {
+            return;
+          }
+          var bodyDiv = this.$.itemajax.bodyDiv;
+          var descripText = document.createElement("H3");
+          var checkBox = document.createElement("paper-checkbox");
+          if (value) {
+            checkBox.setAttribute('checked', true);
+          }
+          var brElement = document.createElement("BR");
+          descripText.innerText = key;
+//          fieldInputBox.value = value;
+          bodyDiv.appendChild(descripText);
+          bodyDiv.appendChild(checkBox);
+          bodyDiv.appendChild(brElement);
+        },
+
+        populateBody: function () {
+          this.$.itemajax.bodyDiv.innerHTML = "";
+          var obj = false;
+          try {
+            obj = this.$.itemajax.jsonObj;
+          } catch (err) {
+            console.log("APPEARS TO BE A PROBLEM WITH " + this.viewUrl);
+          }
+          if (obj) {
+            for (var key in obj) {
+              var attrName = key;
+              if (obj[key] === true || obj[key] === false) {
+                this.createCheckBox(key, obj[key]);
+              } else {
+                this.createFieldInputBox(key, obj[key]);
+              }
+            }
+          }
+        },
+        populateFooter: function () {
+          // no op because couldn't figure out how to make on-create
+          // or on-update work from an element created with javascript
+          // so created above, in html argh
+        },
+
+        populate: function () {
+          this.populateTitle();
+          this.populateBody();
+          this.populateFooter();
+        },
+        updateRecord: function () {
+          console.log("SOME KIND OF UPDATE");
+        }
+      });
+    })();
   </script>
 </dom-module>
