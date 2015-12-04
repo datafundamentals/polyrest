@@ -1,4 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 
 <dom-module id="item-create">
   <template>
@@ -6,9 +9,22 @@
       :host {
         display: block;
       }
+
+      paper-icon-button {
+        margin-left: 5px;
+        margin-right: 5px;
+        display: block;
+        text-align: center;
+        color: #ff3e52;
+        width: 50px;
+      }
     </style>
-    <!--<div>Hello </div>-->
-    <div>Hello <span>{{createurl}}</span></div>
+    <item-ajax
+      id="itemajax"
+      on-response="populate">
+    </item-ajax>
+    <span>Click icon when ready to create this record:</span>
+    <paper-icon-button id="createrecord" icon="create"></paper-icon-button>
   </template>
   <script>
     (function () {
@@ -16,6 +32,10 @@
 
       Polymer({
         is: 'item-create',
+        listeners: {
+          'createrecord.tap': 'createnewrecord'
+        },
+
 
         properties: {
           createurl: {
@@ -25,7 +45,7 @@
           schemaspec: {
             type: String,
             notify: true,
-            observer: 'blah'
+            observer: 'initializeForm'
           },
           schemaObject: {
             type: Object,
@@ -36,72 +56,71 @@
             notify: true
           }
         },
-        blah: function () {
+        initializeForm: function () {
           this.schemaObject = JSON.parse(this.schemaspec);
-          console.log(JSON.stringify(this.schemaObject));
+          this.populateTitle();
+          var fieldForm = document.createElement("form");
+          fieldForm.setAttribute("id", "inputform");
+          this.populateBody(fieldForm);
+          this.$.itemajax.bodyDiv.appendChild(fieldForm);
         },
         populateTitle: function () {
-          this.$.itemajax.titleDiv.innerText = this.extractTitle(this.$.itemajax.deslashedurl);
+          this.$.itemajax.titleDiv.innerText = this.extractTitle("http:__172.99.79.10:8156_task");
         },
 
         extractTitle: function (url) {
           var target = "" + url;
           target = target.split('_');
-          var id = target.pop();
           var name = target.pop();
-          return name + " (id=" + id + ")";
+          return "Create new " + name + ":";
         },
 
-        createFieldInputBox: function (key, value) {
+        createFormField: function (key, value, form, type) {
           if (key.startsWith("_")) {
             return;
+          } else {
+            var inputField = document.createElement(type);
+            inputField.setAttribute("name", key);
+            inputField.value = value;
+            inputField.label = key;
+            form.appendChild(inputField);
+            var isCheckbox = (type == "paper-checkbox") ? true : false;
+            if (isCheckbox) {
+              var descripText = document.createElement("span");
+              if (value) {
+                inputField.setAttribute('checked', true);
+              }
+              descripText.innerText = key;
+              form.appendChild(descripText);
+            }
+            form.appendChild(document.createElement("BR"));
           }
-          var bodyDiv = this.$.itemajax.bodyDiv;
-          var descripText = document.createElement("H3");
-          var fieldInputBox = document.createElement("paper-textarea");
-          var brElement = document.createElement("BR");
-          descripText.innerText = key;
-          fieldInputBox.value = value;
-          bodyDiv.appendChild(descripText);
-          bodyDiv.appendChild(fieldInputBox);
-          bodyDiv.appendChild(brElement);
         },
 
-        createCheckBox: function (key, value) {
-          if (key.startsWith("_")) {
-            return;
-          }
-          var bodyDiv = this.$.itemajax.bodyDiv;
-          var descripText = document.createElement("H3");
-          var checkBox = document.createElement("paper-checkbox");
-          if (value) {
-            checkBox.setAttribute('checked', true);
-          }
-          var brElement = document.createElement("BR");
-          descripText.innerText = key;
-//          fieldInputBox.value = value;
-          bodyDiv.appendChild(descripText);
-          bodyDiv.appendChild(checkBox);
-          bodyDiv.appendChild(brElement);
-        },
-
-        populateBody: function () {
-          this.$.itemajax.bodyDiv.innerHTML = "";
-          var obj = false;
-          try {
-            obj = this.$.itemajax.jsonObj;
-          } catch (err) {
-            console.log("APPEARS TO BE A PROBLEM WITH " + this.viewUrl);
-          }
-          if (obj) {
-            for (var key in obj) {
-              var attrName = key;
-              if (obj[key] === true || obj[key] === false) {
-                this.createCheckBox(key, obj[key]);
-              } else {
-                this.createFieldInputBox(key, obj[key]);
+        populateBody: function (form) {
+          if (this.schemaObject) {
+            var schema = this.schemaObject;
+            for (var key in schema) {
+              var myValueType = schema[key];
+              if (myValueType && myValueType["valueType"]) {
+                var fieldType = myValueType["valueType"];
+                if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer") {
+                  this.createFormField(key, "", form, "paper-input");
+                } else if (fieldType == "longText") {
+                  this.createFormField(key, "", form, "paper-textarea");
+                } else if (fieldType == "boolean") {
+                  this.createFormField(key, true, form, "paper-checkbox");
+                }
               }
             }
+//            for (var key in obj) {
+//              var attrName = key;
+//              if (obj[key] === true || obj[key] === false) {
+//                this.createCheckBox(key, obj[key]);
+//              } else {
+//                this.createFieldTextArea(key, obj[key]);
+//              }
+//            }
           }
         },
         populateFooter: function () {
@@ -115,8 +134,13 @@
           this.populateBody();
           this.populateFooter();
         },
-        updateRecord: function () {
-          console.log("SOME KIND OF UPDATE");
+        createnewrecord: function (e) {
+          console.log("SOME KIND OF FUNCTIONALITY");
+          var elem = document.getElementById('inputform').elements;
+          var objectToCreate = {};
+          for (var i = 0; i < elem.length; i++) {
+            console.log("hi " + elem[i].value + "\t" + elem[i].getAttribute("name"));
+          }
         }
       });
     })();
