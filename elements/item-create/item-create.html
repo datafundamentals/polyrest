@@ -10,29 +10,14 @@
         display: block;
       }
 
-      paper-icon-button {
-        margin-left: 5px;
-        margin-right: 5px;
-        display: block;
-        text-align: center;
-        color: #ff3e52;
-        width: 50px;
-      }
     </style>
     <form id="inputform">
-      <!--First name: <input type="text" name="fname"><br>-->
-      <!--<input type="hidden" name="test" value="{{bar}}">-->
-      <!--<paper-textarea value="{{bar}}"></paper-textarea>-->
-      <!--<br>-->
-      <input type="button" on-click="createnewrecord" value="Submit">
-      <br><br>
+      <input type="button" on-click="createnewrecord" value="Submit form">
     </form>
     <item-ajax
       id="itemajax"
       on-response="populate">
     </item-ajax>
-    <span>Click icon when ready to create this record:</span>
-    <paper-icon-button id="createrecord" icon="create"></paper-icon-button>
   </template>
   <script>
     (function () {
@@ -40,16 +25,8 @@
 
       Polymer({
         is: 'item-create',
-        listeners: {
-          'createrecord.tap': 'createnewrecord'
-        },
-
 
         properties: {
-          createurl: {
-            type: String,
-            notify: true
-          },
           schemaspec: {
             type: String,
             notify: true,
@@ -67,11 +44,10 @@
         initializeForm: function () {
           this.schemaObject = JSON.parse(this.schemaspec);
           this.populateTitle();
-//          var fieldForm = document.createElement("form");
-//          fieldForm.setAttribute("id", "inputform");
-//          this.populateBody(fieldForm);
-//          this.$.itemajax.bodyDiv.appendChild(fieldForm);
-          this.populateBody();
+          var fieldForm = this.$.inputform;
+          fieldForm.setAttribute("id", "inputform");
+          this.populateBody(fieldForm);
+          this.$.itemajax.bodyDiv.appendChild(fieldForm);
         },
         populateTitle: function () {
           this.$.itemajax.titleDiv.innerText = this.extractTitle("http:__172.99.79.10:8156_task");
@@ -83,52 +59,23 @@
           var name = target.pop();
           return "Create new " + name + ":";
         },
-
-        /* includes some hackish code to get around a problem discussed here
-         https://github.com/PolymerElements/paper-input/issues/127
-         */
         createFormField: function (key, value, form, type) {
           if (key.startsWith("_")) {
             return;
           } else {
             var inputField = document.createElement(type);
             inputField.label = key;
-            form.appendChild(inputField);
-            var isCheckbox = (type == "paper-checkbox") ? true : false;
-            if (isCheckbox) {
-              var descripText = document.createElement("span");
-              if (value) {
-                inputField.setAttribute('checked', true);
-              }
-              descripText.innerText = key;
-              form.appendChild(descripText);
-            }
-            var isTextArea = (type == "plastic-textarea") ? true : false;
-            if (isTextArea) {
-                inputField.setAttribute('idname', key);
-            }
+            inputField.setAttribute('idname', key);
             inputField.setAttribute("name", key);
             inputField.value = value;
-//            var needsExtraHelp = (type == "paper-input") ? false : true;
-//            console.log("NEEDS HELP "+ needsExtraHelp);
-//            if(needsExtraHelp){
-//              var data = "{{my-"+key+"}}";
-//              var hiddenInput = document.createElement("input");
-//              hiddenInput.setAttribute("name", key);
-//              hiddenInput.setAttribute("hidden", true);
-//              hiddenInput.setAttribute("value", data);
-//              inputField.value = data;
-//              form.appendChild(hiddenInput);
-//            }else{
-//              inputField.setAttribute("name", key);
-//              inputField.value = value;
-//            }
+            if (type == "paper-checkbox" && value) {
+              inputField.setAttribute('truefalse', true);
+            }
+            form.appendChild(inputField);
             form.appendChild(document.createElement("BR"));
           }
         },
-
-        populateBody: function () {
-          var form = this.$.inputform;
+        populateBody: function (form) {
           if (this.schemaObject) {
             var schema = this.schemaObject;
             for (var key in schema) {
@@ -138,40 +85,22 @@
                 if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer") {
                   this.createFormField(key, "", form, "paper-input");
                 } else if (fieldType == "longText") {
-                  this.createFormField(key, "", form, "plastic-textarea");
+                  this.createFormField(key, "", form, "polyrest-textarea");
                 } else if (fieldType == "boolean") {
-                  this.createFormField(key, true, form, "paper-checkbox");
+                  this.createFormField(key, true, form, "polyrest-checkbox");
                 }
               }
             }
-//            for (var key in obj) {
-//              var attrName = key;
-//              if (obj[key] === true || obj[key] === false) {
-//                this.createCheckBox(key, obj[key]);
-//              } else {
-//                this.createFieldTextArea(key, obj[key]);
-//              }
-//            }
           }
         },
         populateFooter: function () {
-          // no op because couldn't figure out how to make on-create
-          // or on-update work from an element created with javascript
-          // so created above, in html argh
         },
-
         populate: function () {
           this.populateTitle();
           this.populateBody();
           this.populateFooter();
         },
         createnewrecord: function (e) {
-          console.log("SOME KIND OF FUNCTIONALITY");
-//          var elem = document.getElementById('inputform').elements;
-//          var objectToCreate = {};
-//          for (var i = 0; i < elem.length; i++) {
-//            console.log("hi " + elem[i].value + "\t" + elem[i].getAttribute("name"));
-//          }
           var elem = document.getElementById('inputform').elements;
           for (var i = 0; i < elem.length; i++) {
             if (elem[i].value && elem[i].getAttribute("name")) {

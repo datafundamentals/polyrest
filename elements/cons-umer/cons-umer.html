@@ -35,10 +35,6 @@ For development work only. Delete after everything downstream works
     <a data-route="itemview-section" href="{{view()}}">
       <iron-icon icon="view-quilt"></iron-icon>
       <span>Item View:</span>
-    </a><br>
-    <a data-route="itemcreate-section" href="{{create()}}">
-      <iron-icon icon="create"></iron-icon>
-      <span>Create Item:</span>
     </a>
   </template>
   <script>
@@ -64,11 +60,6 @@ For development work only. Delete after everything downstream works
         view: function () {
           var url = "http://172.99.79.10:8156/scoremunger/1";
           return "/itemview/" + SlashHandler.PassUrl.encodeUrl(url);
-        },
-        create: function () {
-          var url = "http://172.99.79.10:8156/scoremunger";
-          var schemaspec = ""
-          return "/itemcreate/" + SlashHandler.PassUrl.encodeUrl(url)+"/"+ SlashHandler.PassUrl.encodeUrl(schemaspec);
         }
       });
     })();

@@ -10,30 +10,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="plastic-textarea">
+<dom-module id="polyrest-checkbox">
   <template>
     <style>
       :host {
         display: block;
       }
     </style>
-    <input type="hidden" name="{{idname}}" value="{{text}}">
-    <paper-textarea value="{{text}}"></paper-textarea>
+    <span>{{label}}</span>
+    <input type="hidden" name="{{idname}}"  value="{{truefalse}}">
+    <paper-checkbox value="{{truefalse}}"></paper-checkbox>
   </template>
   <script>
   (function() {
     'use strict';
 
     Polymer({
-      is: 'plastic-textarea',
+      is: 'polyrest-checkbox'
 
-      properties: {
-        foo: {
-          type: String,
-          value: 'plastic-textarea',
-          notify: true
-        }
-      }
     });
   })();
   </script>

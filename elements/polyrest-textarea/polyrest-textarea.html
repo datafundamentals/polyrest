@@ -1,0 +1,25 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
+<dom-module id="polyrest-textarea">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <input type="hidden" name="{{idname}}" value="{{text}}">
+    <paper-textarea value="{{text}}" label="{{label}}"></paper-textarea>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+//    see https://github.com/PolymerElements/paper-input/issues/127 for why this exists
+
+      Polymer({
+        is: 'polyrest-textarea'
+      });
+    })();
+  </script>
+</dom-module>
