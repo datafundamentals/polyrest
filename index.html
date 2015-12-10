@@ -82,6 +82,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-icon icon="apps"></iron-icon>
           <span>Sample</span>
         </a>
+        <a data-route="formxmpl-section" href="/formxmpl/" on-click="onDataRouteClick">
+          <iron-icon icon="apps"></iron-icon>
+          <span>Form Exmpl</span>
+        </a>
       </paper-menu>
 
     </paper-scroll-header-panel>
@@ -114,27 +118,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="content">
         <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-          <section data-route="people-section">
+          <section data-route="formxmpl-section">
             <paper-material elevation="1">
-              <person-list></person-list>
+              <form-xmpl></form-xmpl>
             </paper-material>
           </section>
-
-          <section data-route="person-view">
+          <section data-route="formxmpl2-section">
             <paper-material elevation="1">
-              <person-view personid={{params.personid}}></person-view>
-            </paper-material>
-          </section>
-
-          <section data-route="restapi-section">
-            <paper-material elevation="1">
-              <restapi-view restUrlRoot={{params.resturlroot}}></restapi-view>
-            </paper-material>
-          </section>
-
-          <section data-route="experiment-section">
-            <paper-material elevation="1">
-              <exper-iment myurl={{params.myurl}}></exper-iment>
+              <form-xmpl2></form-xmpl2>
             </paper-material>
           </section>
 
@@ -167,13 +158,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <item-view viewurl={{params.viewurl}}></item-view>
             </paper-material>
           </section>
-
-          <section data-route="replacemetemplate-section">
-            <paper-material elevation="1">
-              <replaceme-template replacemeurl={{params.replacemeurl}}></replaceme-template>
-            </paper-material>
-          </section>
-
           <section data-route="consumer-section">
             <paper-material elevation="1">
               <cons-umer></cons-umer>
@@ -185,19 +169,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <to-do></to-do>
             </paper-material>
           </section>
-
-          <section data-route="sample-section">
-            <paper-material elevation="1">
-              <item-sample sampleurl={{params.sampleurl}}></item-sample>
-            </paper-material>
-          </section>
-
-          <section data-route="example-section">
-            <paper-material elevation="1">
-              <item-sample dampleurl={{params.sampleurl}}></item-sample>
-            </paper-material>
-          </section>
-
 
         </iron-pages>
       </div>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<item-create>
+
+  <item-ajax id="itemajax" class="style-scope item-create">
+
+    <iron-ajax id="ajax" auto="false" handle-as="json" debounce-duration="300" class="style-scope item-ajax"
+               hidden=""></iron-ajax>
+    <h2 id="title" class="style-scope item-ajax">Create new task:</h2>
+    <hr class="style-scope item-ajax">
+    <div id="main" class="style-scope item-ajax">
+      <form id="inputform">
+        <paper-input aria-disabled="false" name="name" class="x-scope paper-input-0">
+
+
+          <paper-input-container class="style-scope paper-input x-scope paper-input-container-0">
+
+
+            <div class="floated-label-placeholder style-scope paper-input-container">&nbsp;</div>
+            <template is="dom-if" class="style-scope paper-input-container"></template>
+
+            <div class="input-content style-scope paper-input-container">
+
+              <div class="label-and-input-container style-scope paper-input-container">
+                <label class="style-scope paper-input" id="paper-input-label-640" style="left: 0px;">name</label><input
+                is="iron-input" id="input" class="style-scope paper-input" autocomplete="off" placeholder=""
+                autocapitalize="none" autocorrect="off" aria-describedby="" name="name"
+                aria-labelledby="paper-input-label-640">
+                <template is="dom-if" class="style-scope paper-input"></template>
+                <template is="dom-if" class="style-scope paper-input"></template>
+              </div>
+
+            </div>
+
+            <div class="underline style-scope paper-input-container">
+              <div class="unfocused-line fit style-scope paper-input-container"></div>
+              <div class="focused-line fit style-scope paper-input-container"></div>
+            </div>
+
+            <div class="add-on-content style-scope paper-input-container">
+
+            </div>
+
+          </paper-input-container>
+
+        </paper-input>
+        <br>
+        <paper-textarea aria-disabled="false" name="descrip">
+
+
+          <paper-input-container class="style-scope paper-textarea x-scope paper-input-container-0">
+
+
+            <div class="floated-label-placeholder style-scope paper-input-container">&nbsp;</div>
+            <template is="dom-if" class="style-scope paper-input-container"></template>
+
+            <div class="input-content style-scope paper-input-container">
+
+              <div class="label-and-input-container style-scope paper-input-container">
+                <label class="style-scope paper-textarea" id="paper-input-label-640" style="left: 0px;">descrip</label>
+                <iron-autogrow-textarea id="input"
+                                        class="paper-input-input style-scope paper-textarea x-scope iron-autogrow-textarea-0"
+                                        aria-disabled="false" autocomplete="off" placeholder="" autocapitalize="none"
+                                        rows="1" max-rows="0" name="descrip">
+                  <!-- the mirror sizes the input/textarea so it grows with typing -->
+                  <div id="mirror" class="mirror-text style-scope iron-autogrow-textarea" aria-hidden="true">
+                    &nbsp;</div>
+
+                  <!-- size the input/textarea with a div, because the textarea has intrinsic size in ff -->
+                  <div class="textarea-container fit style-scope iron-autogrow-textarea">
+                    <textarea id="textarea" class="style-scope iron-autogrow-textarea" rows="1" autocomplete="off"
+                              placeholder="" aria-describedby="" aria-labelledby="paper-input-label-640"></textarea>
+                  </div>
+                </iron-autogrow-textarea>
+                <template is="dom-if" class="style-scope paper-textarea"></template>
+                <template is="dom-if" class="style-scope paper-textarea"></template>
+              </div>
+
+            </div>
+
+            <div class="underline style-scope paper-input-container">
+              <div class="unfocused-line fit style-scope paper-input-container"></div>
+              <div class="focused-line fit style-scope paper-input-container"></div>
+            </div>
+
+            <div class="add-on-content style-scope paper-input-container">
+
+            </div>
+
+          </paper-input-container>
+
+        </paper-textarea>
+        <br>
+        <paper-input aria-disabled="false" name="abrv" class="x-scope paper-input-0">
+
+
+          <paper-input-container class="style-scope paper-input x-scope paper-input-container-0">
+
+
+            <div class="floated-label-placeholder style-scope paper-input-container">&nbsp;</div>
+            <template is="dom-if" class="style-scope paper-input-container"></template>
+
+            <div class="input-content style-scope paper-input-container">
+
+              <div class="label-and-input-container style-scope paper-input-container">
+                <label class="style-scope paper-input" id="paper-input-label-641" style="left: 0px;">abrv</label><input
+                is="iron-input" id="input" class="style-scope paper-input" autocomplete="off" placeholder=""
+                autocapitalize="none" autocorrect="off" aria-describedby="" name="abrv"
+                aria-labelledby="paper-input-label-641">
+                <template is="dom-if" class="style-scope paper-input"></template>
+                <template is="dom-if" class="style-scope paper-input"></template>
+              </div>
+
+            </div>
+
+            <div class="underline style-scope paper-input-container">
+              <div class="unfocused-line fit style-scope paper-input-container"></div>
+              <div class="focused-line fit style-scope paper-input-container"></div>
+            </div>
+
+            <div class="add-on-content style-scope paper-input-container">
+
+            </div>
+
+          </paper-input-container>
+
+        </paper-input>
+        <br>
+        <paper-input aria-disabled="false" name="authorId" class="x-scope paper-input-0">
+
+
+          <paper-input-container class="style-scope paper-input x-scope paper-input-container-0">
+
+
+            <div class="floated-label-placeholder style-scope paper-input-container">&nbsp;</div>
+            <template is="dom-if" class="style-scope paper-input-container"></template>
+
+            <div class="input-content style-scope paper-input-container">
+
+              <div class="label-and-input-container style-scope paper-input-container">
+                <label class="style-scope paper-input" id="paper-input-label-641"
+                       style="left: 0px;">authorId</label><input is="iron-input" id="input"
+                                                                 class="style-scope paper-input" autocomplete="off"
+                                                                 placeholder="" autocapitalize="none" autocorrect="off"
+                                                                 aria-describedby="" name="authorId"
+                                                                 aria-labelledby="paper-input-label-641">
+                <template is="dom-if" class="style-scope paper-input"></template>
+                <template is="dom-if" class="style-scope paper-input"></template>
+              </div>
+
+            </div>
+
+            <div class="underline style-scope paper-input-container">
+              <div class="unfocused-line fit style-scope paper-input-container"></div>
+              <div class="focused-line fit style-scope paper-input-container"></div>
+            </div>
+
+            <div class="add-on-content style-scope paper-input-container">
+
+            </div>
+
+          </paper-input-container>
+
+        </paper-input>
+        <br>
+        <paper-input aria-disabled="false" name="effectKey" class="x-scope paper-input-0">
+
+
+          <paper-input-container class="style-scope paper-input x-scope paper-input-container-0">
+
+
+            <div class="floated-label-placeholder style-scope paper-input-container">&nbsp;</div>
+            <template is="dom-if" class="style-scope paper-input-container"></template>
+
+            <div class="input-content style-scope paper-input-container">
+
+              <div class="label-and-input-container style-scope paper-input-container">
+                <label class="style-scope paper-input" id="paper-input-label-642"
+                       style="left: 0px;">effectKey</label><input is="iron-input" id="input"
+                                                                  class="style-scope paper-input" autocomplete="off"
+                                                                  placeholder="" autocapitalize="none" autocorrect="off"
+                                                                  aria-describedby="" name="effectKey"
+                                                                  aria-labelledby="paper-input-label-642">
+                <template is="dom-if" class="style-scope paper-input"></template>
+                <template is="dom-if" class="style-scope paper-input"></template>
+              </div>
+
+            </div>
+
+            <div class="underline style-scope paper-input-container">
+              <div class="unfocused-line fit style-scope paper-input-container"></div>
+              <div class="focused-line fit style-scope paper-input-container"></div>
+            </div>
+
+            <div class="add-on-content style-scope paper-input-container">
+
+            </div>
+
+          </paper-input-container>
+
+        </paper-input>
+        <br>
+        <paper-input aria-disabled="false" name="groupKey" class="x-scope paper-input-0">
+
+
+          <paper-input-container class="style-scope paper-input x-scope paper-input-container-0">
+
+
+            <div class="floated-label-placeholder style-scope paper-input-container">&nbsp;</div>
+            <template is="dom-if" class="style-scope paper-input-container"></template>
+
+            <div class="input-content style-scope paper-input-container">
+
+              <div class="label-and-input-container style-scope paper-input-container">
+                <label class="style-scope paper-input" id="paper-input-label-642"
+                       style="left: 0px;">groupKey</label><input is="iron-input" id="input"
+                                                                 class="style-scope paper-input" autocomplete="off"
+                                                                 placeholder="" autocapitalize="none" autocorrect="off"
+                                                                 aria-describedby="" name="groupKey"
+                                                                 aria-labelledby="paper-input-label-642">
+                <template is="dom-if" class="style-scope paper-input"></template>
+                <template is="dom-if" class="style-scope paper-input"></template>
+              </div>
+
+            </div>
+
+            <div class="underline style-scope paper-input-container">
+              <div class="unfocused-line fit style-scope paper-input-container"></div>
+              <div class="focused-line fit style-scope paper-input-container"></div>
+            </div>
+
+            <div class="add-on-content style-scope paper-input-container">
+
+            </div>
+
+          </paper-input-container>
+
+        </paper-input>
+        <br>
+        <paper-checkbox role="checkbox" tabindex="0" toggles="" aria-checked="true" aria-disabled="false" checked=""
+                        active="" name="orGroupName" class="x-scope paper-checkbox-0">
+
+
+          <div id="checkboxContainer" class="style-scope paper-checkbox">
+            <div id="checkbox" class="checked  style-scope paper-checkbox">
+              <div id="checkmark" class="style-scope paper-checkbox"></div>
+            </div>
+          </div>
+
+          <div id="checkboxLabel" class="style-scope paper-checkbox"></div>
+        </paper-checkbox>
+        <span>orGroupName</span><br>
+        <paper-checkbox role="checkbox" tabindex="0" toggles="" aria-checked="true" aria-disabled="false" checked=""
+                        active="" name="orGroupMember" class="x-scope paper-checkbox-0">
+
+
+          <div id="checkboxContainer" class="style-scope paper-checkbox">
+            <div id="checkbox" class="checked  style-scope paper-checkbox">
+              <div id="checkmark" class="style-scope paper-checkbox"></div>
+            </div>
+          </div>
+
+          <div id="checkboxLabel" class="style-scope paper-checkbox"></div>
+        </paper-checkbox>
+        <span>orGroupMember</span><br></form>
+    </div>
+    <hr class="style-scope item-ajax">
+    <div id="foot" class="style-scope item-ajax"></div>
+    <hr class="style-scope item-ajax">
+    <paper-textarea id="tarea" label="JSON from REST API, furnished to corroborate above:" value="No JSON YET"
+                    class="style-scope item-ajax" aria-disabled="false">
+
+
+      <paper-input-container class="style-scope paper-textarea x-scope paper-input-container-0">
+
+
+        <div class="floated-label-placeholder style-scope paper-input-container">&nbsp;</div>
+        <template is="dom-if" class="style-scope paper-input-container"></template>
+
+        <div class="input-content label-is-floating style-scope paper-input-container">
+
+          <div class="label-and-input-container style-scope paper-input-container">
+            <label class="style-scope paper-textarea" id="paper-input-label-554" style="left: 0px;">JSON from REST API,
+              furnished to corroborate above:</label>
+            <iron-autogrow-textarea id="input"
+                                    class="paper-input-input style-scope paper-textarea x-scope iron-autogrow-textarea-0"
+                                    aria-disabled="false" autocomplete="off" placeholder="" autocapitalize="none"
+                                    rows="1" max-rows="0">
+              <!-- the mirror sizes the input/textarea so it grows with typing -->
+              <div id="mirror" class="mirror-text style-scope iron-autogrow-textarea" aria-hidden="true">No JSON YET&nbsp;</div>
+
+              <!-- size the input/textarea with a div, because the textarea has intrinsic size in ff -->
+              <div class="textarea-container fit style-scope iron-autogrow-textarea">
+                <textarea id="textarea" class="style-scope iron-autogrow-textarea" rows="1" autocomplete="off"
+                          placeholder="" aria-describedby="" aria-labelledby="paper-input-label-554"></textarea>
+              </div>
+            </iron-autogrow-textarea>
+            <template is="dom-if" class="style-scope paper-textarea"></template>
+            <template is="dom-if" class="style-scope paper-textarea"></template>
+          </div>
+
+        </div>
+
+        <div class="underline style-scope paper-input-container">
+          <div class="unfocused-line fit style-scope paper-input-container"></div>
+          <div class="focused-line fit style-scope paper-input-container"></div>
+        </div>
+
+        <div class="add-on-content style-scope paper-input-container">
+
+        </div>
+
+      </paper-input-container>
+
+    </paper-textarea>
+  </item-ajax>
+  <span class="style-scope item-create">Click icon when ready to create this record:</span>
+  <paper-icon-button id="createrecord" icon="create" class="style-scope item-create x-scope paper-icon-button-0"
+                     role="button" tabindex="0" aria-disabled="false">
+
+    <iron-icon id="icon" class="style-scope paper-icon-button x-scope iron-icon-0">
+      <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope iron-icon"
+           style="pointer-events: none; display: block; width: 100%; height: 100%;">
+        <g class="style-scope iron-icon">
+          <path
+            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+            class="style-scope iron-icon"></path>
+        </g>
+      </svg>
+    </iron-icon>
+  </paper-icon-button>
+</item-create>
+</body>
+</html>

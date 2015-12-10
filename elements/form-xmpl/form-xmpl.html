@@ -1,0 +1,99 @@
+
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
+<dom-module id="form-xmpl">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <form id="myForms">
+      First name: <input type="text" name="fname"><br>
+      <input type="hidden" name="test" value="{{bar}}">
+      <paper-textarea value="{{bar}}"></paper-textarea>
+      <br>
+      <input type="button" on-click="myFunction" value="Submit form">
+    </form>
+    <item-ajax
+      id="itemajax"
+      on-response="populate">
+    </item-ajax>
+  </template>
+  <script>
+    //    document.getElementById('formGet').addEventListener('iron-form-submit', display);
+    //
+    //    function display(event) {
+    //      var output = document.getElementById('output');
+    //      output.innerHTML = JSON.stringify(event.detail);
+    //    }
+    //
+    //    function clickHandler(event) {
+    //      Polymer.dom(event).localTarget.parentElement.submit();
+    //    }
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'form-xmpl',
+
+        properties: {
+          apeshit: {
+            type: String,
+            notify: true
+          }
+        },
+
+        attached: function(){
+          var form = this.$.myForms;
+          var inputOneLabel = document.createElement("span");
+          inputOneLabel.innerText = "My Name: "
+          form.appendChild(inputOneLabel);
+          var newInput = document.createElement("input");
+          newInput.setAttribute("name", "myName");
+          newInput.setAttribute("type", "text");
+          newInput.setAttribute("value", "my name here");
+          form.appendChild(newInput);
+
+
+
+
+          form.appendChild(document.createElement("BR"));
+          var inputTwoLabel = document.createElement("span");
+          inputTwoLabel.innerText = "Your Name: "
+          form.appendChild(inputTwoLabel);
+          var secondInput = document.createElement("paper-textarea");
+          this.apeshit = "foobarwakh";
+//          this.secondInputValue.notify = true;
+          secondInput.setAttribute("name", "yourName");
+          secondInput.setAttribute("value", this.apeshit);
+          secondInput.setAttribute("onchange", "this.mychange");
+          form.appendChild(secondInput);
+          var hiddenInput = document.createElement("input");
+          hiddenInput.setAttribute("name", "hideme");
+          hiddenInput.setAttribute("id", "hideme");
+          hiddenInput.setAttribute("hidden", true);
+          hiddenInput.setAttribute("value", this.apeshit);
+//          this.notifyPath('secondInputValue', this.secondInputValue);
+          form.appendChild(hiddenInput);
+          form.appendChild(document.createElement("BR"));
+        },
+
+        myFunction: function (event) {
+          console.log("hohoho" );
+          var elem = document.getElementById('myForms').elements;
+          for (var i = 0; i < elem.length; i++) {
+            if (elem[i].value&&elem[i].getAttribute("name")) {
+              console.log(elem[i].getAttribute("name")+ "=" +elem[i].value  );
+            }
+          }
+        },
+        mychange: function () {
+          console.log("ho change" );
+        }
+      });
+    })();
+  </script>
+</dom-module>
