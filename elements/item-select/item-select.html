@@ -198,6 +198,9 @@
           if(select.indexOf("?")>0){
             select = select.substring(0, select.indexOf("?"));
           }
+          if(select.endsWith("{")){
+            select = select = select.substring(0, select.length - 1);
+          }
           window.location = BASE_URL + "#!/itemcreate/"+ select+ "/"+ this.schemaencoded;
           window.location.reload();
         }

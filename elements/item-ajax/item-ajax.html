@@ -13,6 +13,7 @@
       id="ajax"
       auto="false"
       handle-as="json"
+      content-type="application/json"
       on-response="_handleResponse"
       on-error="_handleError"
       debounce-duration="300"></iron-ajax>
@@ -40,6 +41,16 @@
             notify: true,
             observer: 'entryPoint'
           },
+          ajaxMethod: {
+            type: String,
+            notify: true,
+            observer: 'changePost'
+          },
+          ajaxBody: {
+            type: String,
+            notify: true,
+            observer: 'changeBody'
+          },
           jsonObject: {
             type: Object,
             notify: true
@@ -54,6 +65,18 @@
               return this.$.main;
             }
           },
+          manual: {
+            type: Function,
+            value: function () {
+              this.$.ajax.auto = false;
+            }
+          },
+          auto: {
+            type: Function,
+            value: function () {
+              this.$.ajax.auto = true;
+            }
+          },
           titleDiv: {
             type: Function,
             value: function () {
@@ -65,6 +88,11 @@
             value: function () {
               return this.$.foot;
             }
+          }
+        },
+        generateAjaxRequest: function () {
+          if (this.$.ajax.url) {
+            this.$.ajax.generateRequest();
           }
         },
         _handleResponse: function (data) {
@@ -86,7 +114,14 @@
         },
         entryPoint: function () {
           this.$.ajax.url = SlashHandler.PassUrl.decodeUrl(this.deslashedurl);
-
+        },
+        changePost: function () {
+          this.$.ajax.auto = false;
+          this.$.ajax.method = this.ajaxMethod;
+        },
+        changeBody: function () {
+          this.$.ajax.auto = false;
+          this.$.ajax.body = this.ajaxBody;
         },
         _computeViewType: function () {
           this.viewType = "other";

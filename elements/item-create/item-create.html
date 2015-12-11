@@ -16,7 +16,7 @@
     </form>
     <item-ajax
       id="itemajax"
-      on-response="populate">
+      on-response="wellheck">
     </item-ajax>
   </template>
   <script>
@@ -27,6 +27,11 @@
         is: 'item-create',
 
         properties: {
+          createurl: {
+            type: String,
+            notify: true,
+            observer: 'wellheck'
+          },
           schemaspec: {
             type: String,
             notify: true,
@@ -51,6 +56,11 @@
         },
         populateTitle: function () {
           this.$.itemajax.titleDiv.innerText = this.extractTitle("http:__172.99.79.10:8156_task");
+        },
+        wellheck: function () {
+          if (this.$.itemajax.jsonObject) {
+            alert("you got a response" + this.$.itemajax.response.detail);
+          }
         },
 
         extractTitle: function (url) {
@@ -102,10 +112,22 @@
         },
         createnewrecord: function (e) {
           var elem = document.getElementById('inputform').elements;
+          var hasFields = false;
+          var fieldAttributeObject = {};
           for (var i = 0; i < elem.length; i++) {
             if (elem[i].value && elem[i].getAttribute("name")) {
-              console.log(elem[i].getAttribute("name") + "=" + elem[i].value);
+              hasFields = true;
+              fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
             }
+          }
+          if (hasFields) {
+            var body = JSON.stringify(fieldAttributeObject);
+            this.$.itemajax.manual;
+            this.$.itemajax.ajaxBody = body;
+            this.$.itemajax.deslashedurl = this.createurl;
+            this.$.itemajax.ajaxMethod = "POST";
+            this.$.itemajax.generateAjaxRequest();
+            this.$.itemajax.auto;
           }
         }
       });
