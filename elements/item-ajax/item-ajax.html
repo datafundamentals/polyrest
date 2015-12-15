@@ -91,6 +91,7 @@
           }
         },
         generateAjaxRequest: function () {
+          console.log("REQUEST:\n" + this.$.ajax.url + " " + this.$.ajax.method + "\n" + this.$.ajax.body);
           if (this.$.ajax.url) {
             this.$.ajax.generateRequest();
           }
@@ -109,8 +110,20 @@
           }
         }
         ,
-        _handleError: function (data) {
-//          DfHateoas.HandleError._handleError(data);
+        _handleError: function (event) {
+          if(event){
+            var errString = JSON.stringify(event);
+            console.log("ERROR\n" + errString);
+          }
+          if ("isTrusted" in event) {
+            if (event.isTrusted) {
+              alert ("The " + event.type + " event is trusted. See code.");
+            } else {
+              alert ("The " + event.type + " event is not trusted. Can't get much information from this error, but something did not work in the request.");
+            }
+          } else {
+            alert ("The isTrusted property is not supported by your browser");
+          }
         },
         entryPoint: function () {
           this.$.ajax.url = SlashHandler.PassUrl.decodeUrl(this.deslashedurl);

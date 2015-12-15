@@ -55,11 +55,11 @@
           this.$.itemajax.bodyDiv.appendChild(fieldForm);
         },
         populateTitle: function () {
-          this.$.itemajax.titleDiv.innerText = this.extractTitle("http:__172.99.79.10:8156_task");
+          this.$.itemajax.titleDiv.innerText = this.extractTitle(this.createurl);
         },
         wellheck: function () {
           if (this.$.itemajax.jsonObject) {
-            alert("you got a response" + this.$.itemajax.response.detail);
+            alert("you got a response, see code\n" + this.$.itemajax.response.detail);
           }
         },
 

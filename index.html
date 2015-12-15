@@ -74,6 +74,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Drawer Content -->
       <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
+        <a data-route="home-section" href="/home/" on-click="onDataRouteClick">
+          <iron-icon icon="home"></iron-icon>
+          <span>Home</span>
+        </a>
         <a data-route="todo-section" href="/todo/" on-click="onDataRouteClick">
           <iron-icon icon="accessibility"></iron-icon>
           <span>About</span>
@@ -113,6 +117,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Main Content -->
       <div class="content">
         <iron-pages attr-for-selected="data-route" selected="{{route}}">
+
+          <section data-route="home-section">
+            <paper-material elevation="1">
+              <polyrest-home></polyrest-home>
+            </paper-material>
+          </section>
 
           <section data-route="itemlist-section">
             <paper-material elevation="1">
