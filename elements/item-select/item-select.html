@@ -15,10 +15,14 @@
       deslashedurl="{{selecturl}}"
       on-response="populate">
     </item-ajax>
+    <paper-icon-button id="itemnext" icon="home"></paper-icon-button>
+    <paper-icon-button id="itemlast" icon="last"></paper-icon-button>
   </template>
   <script>
     (function () {
       'use strict';
+
+      var BASE_URL = new URL('./', document.location.href).href;
 
       Polymer({
         is: 'item-select',
@@ -33,7 +37,7 @@
           }
         },
 
-        behaviors: [SchemaGuesser],
+        behaviors: [SchemaGuesser, SlashHandler.PassUrl],
 
         populateTitle: function () {
           var obj = this.$.itemajax.jsonObj._embedded;
@@ -125,12 +129,16 @@
           var nextLinkVal = false;
           try {
             nextLinkVal = this.$.itemajax.jsonObj._links.next.href;
+            nextLinkVal = this._transformLink(nextLinkVal);
           } catch (err) {
+            alert ("WOOSIES: " + err);
           }
           var prevLinkVal = false;
           try {
             prevLinkVal = this.$.itemajax.jsonObj._links.prev.href;
+            prevLinkVal = this._transformLink(prevLinkVal);
           } catch (err) {
+            alert ("WOOSIES: " + err);
           }
           if (prevLinkVal) {
             var space = document.createElement('SPAN');
@@ -153,7 +161,9 @@
           var searchLinkVal = false;
           try {
             searchLinkVal = this.$.itemajax.jsonObj._links.search.href;
+            searchLinkVal = this._searchLink(searchLinkVal);
           } catch (err) {
+            alert ("WOOSIES: " + err);
           }
           if (searchLinkVal) {
             var space = document.createElement('SPAN');
@@ -164,6 +174,20 @@
             footerDiv.appendChild(link);
             footerDiv.appendChild(space);
           }
+        },
+
+        _transformLink: function (linkVal) {
+          var returnValue = linkVal;
+          returnValue = SlashHandler.PassUrl.encodeUrl(returnValue);
+          returnValue = BASE_URL + "itemselect/" + returnValue;
+          return returnValue;
+        },
+
+        _searchLink: function (linkVal) {
+          var returnValue = linkVal;
+          returnValue = SlashHandler.PassUrl.encodeUrl(returnValue);
+          returnValue = BASE_URL + "itemsearch/" + returnValue;
+          return returnValue;
         }
 
         ,
@@ -193,15 +217,15 @@
         }
         ,
         createRecord: function () {
-          var BASE_URL = new URL('./', document.location.href).href;
+          console.log("a");
           var select = this.selecturl;
-          if(select.indexOf("?")>0){
+          if (select.indexOf("?") > 0) {
             select = select.substring(0, select.indexOf("?"));
           }
-          if(select.endsWith("{")){
+          if (select.endsWith("{")) {
             select = select = select.substring(0, select.length - 1);
           }
-          window.location = BASE_URL + "#!/itemcreate/"+ select+ "/"+ this.schemaencoded;
+          window.location = BASE_URL + "#!/itemcreate/" + select + "/" + this.schemaencoded;
           window.location.reload();
         }
 

@@ -11,7 +11,7 @@
         display: block;
       }
     </style>
-    <item-update-bar on-update="updateRecord" on-delete="deleteRecord"></item-update-bar>
+    <item-update-bar on-update="updateRecord" on-delete="deleteRecord" on-create="createRecord"></item-update-bar>
     <item-ajax
       id="itemajax"
       deslashedurl="{{viewurl}}"
@@ -69,7 +69,7 @@
           var bodyDiv = this.$.itemajax.bodyDiv;
           var descripText = document.createElement("H3");
           var checkBox = document.createElement("paper-checkbox");
-          if(value){
+          if (value) {
             checkBox.setAttribute('checked', true);
           }
           var brElement = document.createElement("BR");
@@ -114,7 +114,17 @@
           console.log("SOME KIND OF UPDATE");
         },
         deleteRecord: function () {
-          console.log("SOME KIND OF DELETE");
+          var obj = false;
+          try {
+            obj = this.$.itemajax.jsonObj;
+            this.$.itemajax.manual;
+            this.$.itemajax.ajaxMethod = "DELETE";
+            this.$.itemajax.generateAjaxRequest();
+            this.$.itemajax.auto;
+            alert("SOME KIND OF DELETE MIGHT HAVE HAPPENED but now I need to navigate back");
+          } catch (err) {
+            console.log("APPEARS TO BE A PROBLEM WITH " + JSON.stringify(this.err));
+          }
         }
       });
     })();
