@@ -147,7 +147,7 @@
                     this.removeFormContents(fieldForm);
                     this.populateBody(fieldForm);
                 },
-                removeFormContents: function(fieldForm){
+                removeFormContents: function (fieldForm) {
                     while (fieldForm.hasChildNodes()) {
                         fieldForm.removeChild(fieldForm.lastChild);
                     }
@@ -291,11 +291,14 @@
                 getMergedValue: function (key, fieldType, sourceObject) {
                     var newValue = sourceObject[key];
                     if (!newValue) {
-                        if (!fieldType == "boolean") {
+                        if (fieldType != "boolean") {
                             newValue = "";
                         } else {
                             newValue = false;
                         }
+                    }
+                    if (fieldType == "boolean" && newValue == "on") {
+                        newValue = true;
                     }
                     return newValue;
                 }

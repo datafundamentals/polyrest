@@ -1,112 +1,107 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="schema-guesser">
-  <script>
-    var SchemaGuesser = SchemaGuesser || {};
+    <script>
+        var SchemaGuesser = SchemaGuesser || {};
 
-    SchemaGuesser = {
-      guessFromSelectObject: function (obj) {
-        var schema = {};
-        var selection = [];
-        var name = null;
-        var defaultValueOptions = [];
-        if (obj) {
-          for (var key in obj) {
-            name = key;
-            selection = obj[key];
-            break;
-          }
-        }
-        for (var i = 0; i < selection.length; i++) {
-          var record = selection[i];
-          for (var key in record) {
-            this.includeKey(schema, key);
-          }
-        }
-        for (var i = 0; i < selection.length; i++) {
-          var record = selection[i];
-          for (var key in schema) {
-            var value = record[key];
-            this.adjustSchema(value, key, schema, defaultValueOptions);
-            if (defaultValueOptions.length == 1) {
-              schema[key]["defaultValue"] = defaultValueOptions[0];
-            }
-          }
-        }
-        /* leave in for visual check - and sample of how to parse schema object */
-        for (var field in schema) {
-          var myValueType = schema[field];
-          if (myValueType && myValueType["valueType"]) {
+        SchemaGuesser = {
+            guessFromSelectObject: function (obj) {
+                var schema = {};
+                var selection = [];
+                var name = null;
+                var defaultValueOptions = [];
+                if (obj) {
+                    for (var key in obj) {
+                        name = key;
+                        selection = obj[key];
+                        break;
+                    }
+                }
+                for (var i = 0; i < selection.length; i++) {
+                    var record = selection[i];
+                    for (var key in record) {
+                        this.includeKey(schema, key);
+                    }
+                }
+                for (var i = 0; i < selection.length; i++) {
+                    var record = selection[i];
+                    for (var key in schema) {
+                        var value = record[key];
+                        this.adjustSchema(value, key, schema, defaultValueOptions);
+                        if (defaultValueOptions.length == 1) {
+                            schema[key]["defaultValue"] = defaultValueOptions[0];
+                        }
+                    }
+                }
+                /* leave in for visual check - and sample of how to parse schema object */
+                for (var field in schema) {
+                    var myValueType = schema[field];
+                    if (myValueType && myValueType["valueType"]) {
 //            console.log(field + ".valueType=" + myValueType["valueType"]);
-          }
-        }
-        return schema;
-      },
-      includeKey: function (schema, key) {
-        if (!schema[key] && !(key.startsWith("_link"))) {
-          schema[key] = {};
-          schema[key]["valueType"] = "noTypeYet";
-        }
-      },
-      adjustSchema: function (value, key, schema, defaultValueOptions) {
-        if (key == "_links") {
-          //NO OP: console.log(key + "=LINK");
-        } else {
-          var calculatedValueType = this.calculateValueType(value);
-          var previousValueType = schema[key]["valueType"];
-          var highestType = this.highestOf(calculatedValueType, previousValueType);
-          schema[key]["valueType"] = highestType;
-        }
-      },
-      calculateValueType: function (value) {
-        if (value || value === 0) {
-          if ((value === true || value == false) && !this.isNumeric(value)) {
-            return "boolean";
-          } else if (this.isNumeric(value)) {
-            if (value % 1 != 0) {
-              return "decimal";
-            } else {
-              return "integer";
+                    }
+                }
+                return schema;
+            },
+            includeKey: function (schema, key) {
+                if (!schema[key] && !(key.startsWith("_link"))) {
+                    schema[key] = {};
+                    schema[key]["valueType"] = "noTypeYet";
+                }
+            },
+            adjustSchema: function (value, key, schema, defaultValueOptions) {
+                if (key == "_links") {
+                    //NO OP: console.log(key + "=LINK");
+                } else {
+                    var calculatedValueType = this.calculateValueType(value);
+                    var previousValueType = schema[key]["valueType"];
+                    var highestType = this.highestOf(calculatedValueType, previousValueType);
+                    schema[key]["valueType"] = highestType;
+                }
+            },
+            calculateValueType: function (value) {
+                if ((value === true || value == false) && !this.isNumeric(value)) {
+                    return "boolean";
+                } else if (this.isNumeric(value)) {
+                    if (value % 1 != 0) {
+                        return "decimal";
+                    } else {
+                        return "integer";
+                    }
+                } else if (("" + value).length > 80) {
+                    return "longText";
+                } else {
+                    return "shortText";
+                }
             }
-          } else if (("" + value).length > 80) {
-            return "longText";
-          } else {
-            return "shortText";
-          }
-        }
-        else {
-          return "null";
-        }
-      }
-      ,
-      highestOf: function (calculatedValueType, previousValueType) {
-        if (previousValueType === "longText") {
-          return "longText";
-        } else if ((previousValueType == "decimal"
-          || previousValueType == "integer"
-          || previousValueType == "boolean")
-          && !calculatedValueType == "shortText") {
-          return "shortText";
-        } else if ((previousValueType == "decimal"
-          || previousValueType == "integer")
-          && !(previousValueType == "decimal"
-          || previousValueType == "integer")) {
-          return "shortText";
-        } else if (previousValueType == "integer" && calculatedValueType == "decimal") {
-          return "decimal";
-        } else if (previousValueType == "boolean" && !calculatedValueType == "decimal") {
-          return "shortText";
-        } else if (previousValueType == "boolean" && !calculatedValueType == "integer") {
-          return "shortText";
-        } else {
-          return calculatedValueType;
-        }
-      }
-      ,
-      isNumeric: function (num) {
-        return (num > 0 || num === 0 || num === '0' || num < 0) && num !== true && isFinite(num);
-      }
+            ,
+            highestOf: function (calculatedValueType, previousValueType) {
+                if (previousValueType === "longText") {
+                    return "longText";
+                } else if ((previousValueType == "decimal"
+                        || previousValueType == "integer"
+                        || previousValueType == "boolean")
+                        && !calculatedValueType == "shortText") {
+                    return "shortText";
+                } else if ((previousValueType == "decimal"
+                        || previousValueType == "integer")
+                        && !(previousValueType == "decimal"
+                        || previousValueType == "integer")) {
+                    return "shortText";
+                } else if (previousValueType == "integer" && calculatedValueType == "decimal") {
+                    return "decimal";
+                } else if (previousValueType == "boolean" && !calculatedValueType == "decimal") {
+                    return "shortText";
+                } else if (previousValueType == "boolean" && !calculatedValueType == "integer") {
+                    return "shortText";
+                } else {
+                    return calculatedValueType;
+                }
+            }
+            ,
+            isNumeric: function (num) {
+                return (num > 0 || num === 0 || num === '0' || num < 0) && num !== true && isFinite(num);
+            }
 
-    }
-  </script>
+        }
+    </script>
 </dom-module>
