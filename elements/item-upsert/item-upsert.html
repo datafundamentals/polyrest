@@ -26,16 +26,28 @@
         <h2 id="title">hi</h2>
         <hr>
         <form id="inputform">
-            <span id="createReadyLabel">Create </span>
-            <paper-icon-button id=submitCreateButton label="click" icon="add"
-                               on-click="createnewrecord">Create
-            </paper-icon-button>
-            <span id="updateReadyLabel">Update </span>
-            <paper-icon-button id=submitUpdateButton label="click" icon="redo"
-                               on-click="updateRecord"></paper-icon-button>
-            <span id="deleteReadyLabel">Delete </span>
-            <paper-icon-button id=submitDeleteButton label="click" icon="delete"
-                               on-click="deleteRecord"></paper-icon-button>
+            <table>
+                <tr>
+                    <td>
+
+                        <span id="createReadyLabel">Create </span>
+                        <paper-icon-button id=submitCreateButton label="click" icon="add"
+                                           on-click="createnewrecord">Create
+                        </paper-icon-button>
+                    </td>
+                    <td>
+                        <span id="updateReadyLabel">Update </span>
+                        <paper-icon-button id=submitUpdateButton label="click" icon="redo"
+                                           on-click="updateRecord"></paper-icon-button>
+                    </td>
+                    <td>
+                        <span id="deleteReadyLabel">Delete </span>
+                        <paper-icon-button id=submitDeleteButton label="click" icon="delete"
+                                           on-click="deleteRecord"></paper-icon-button>
+                    </td>
+                </tr>
+            </table>
+            <div id="fieldNodes" name="fieldNodes"></div>
         </form>
         <iron-ajax
                 id="ajax"
@@ -131,8 +143,14 @@
                     console.log("SCHEMA:\n" + this.schemaspec);
                     this.schemaObject = JSON.parse(this.schemaspec);
                     this.populateTitle();
-                    var fieldForm = this.$.inputform;
+                    var fieldForm = this.$.fieldNodes;
+                    this.removeFormContents(fieldForm);
                     this.populateBody(fieldForm);
+                },
+                removeFormContents: function(fieldForm){
+                    while (fieldForm.hasChildNodes()) {
+                        fieldForm.removeChild(fieldForm.lastChild);
+                    }
                 },
                 populateTitle: function () {
 //          console.log(this.tableurl);
@@ -275,7 +293,7 @@
                     if (!newValue) {
                         if (!fieldType == "boolean") {
                             newValue = "";
-                        }else{
+                        } else {
                             newValue = false;
                         }
                     }
