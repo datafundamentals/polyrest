@@ -60,6 +60,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.params = data.params;
     });
 
+    page('/itemupsert/:createurl/:schemaspec/:recordid', scrollToTop, function (data) {
+      app.route = 'itemupsert-section';
+      app.params = data.params;
+    });
+
     page('/itemview/:viewurl', scrollToTop, function (data) {
       app.route = 'itemview-section';
       app.params = data.params;

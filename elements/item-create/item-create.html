@@ -2,22 +2,49 @@
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<!--
+copypaste alert!
 
+This page may have been created by a lazy programmer who copypasted some code
+from item-view.html instead of figuring out how to share a common code base.
+-->
 <dom-module id="item-create">
   <template>
     <style>
       :host {
         display: block;
       }
+      paper-icon-button {
+        margin-left: 5px;
+        margin-right: 5px;
+        display: block;
+        text-align: center;
+        color: #60ff67;
+        width: 50px;
+        height: 50px;
+      }
 
     </style>
-    <form id="inputform">
-      <input type="button" on-click="createnewrecord" value="Submit form">
-    </form>
-    <item-ajax
-      id="itemajax"
-      on-response="wellheck">
-    </item-ajax>
+    <!--<h2 id="title"></h2>-->
+    <!--<hr>-->
+    <!--<form id="inputform">-->
+      <!--<span id="createReadyLabel">Click icon when field data is ready: </span>-->
+      <!--<paper-icon-button id=submitCreateButton label="click" icon="add" on-click="createnewrecord"></paper-icon-button>-->
+      <!--<br>-->
+      <!--<span id="updateReadyLabel">Click icon when field data is ready: </span>-->
+      <!--<paper-icon-button id=submitUpdateButton label="click" icon="redo" on-click="updateRecord"></paper-icon-button>-->
+      <!--<br>-->
+      <!--<span id="deleteReadyLabel">Delete this record: </span>-->
+      <!--<paper-icon-button id=submitDeleteButton label="click" icon="delete" on-click="deleteRecord"></paper-icon-button>-->
+    <!--</form>-->
+    <!--<iron-ajax-->
+      <!--id="ajax"-->
+      <!--auto="false"-->
+      <!--handle-as="json"-->
+      <!--content-type="application/json"-->
+      <!--on-response="_handleResponse"-->
+      <!--on-error="_handleError"-->
+      <!--debounce-duration="300"></iron-ajax>-->
   </template>
   <script>
     (function () {
@@ -26,110 +53,177 @@
       Polymer({
         is: 'item-create',
 
-        properties: {
-          createurl: {
-            type: String,
-            notify: true,
-            observer: 'wellheck'
-          },
-          schemaspec: {
-            type: String,
-            notify: true,
-            observer: 'initializeForm'
-          },
-          schemaObject: {
-            type: Object,
-            notify: true
-          },
-          titleName: {
-            type: String,
-            notify: true
-          }
-        },
-        initializeForm: function () {
-          this.schemaObject = JSON.parse(this.schemaspec);
-          this.populateTitle();
-          var fieldForm = this.$.inputform;
-          fieldForm.setAttribute("id", "inputform");
-          this.populateBody(fieldForm);
-          this.$.itemajax.bodyDiv.appendChild(fieldForm);
-        },
-        populateTitle: function () {
-          this.$.itemajax.titleDiv.innerText = this.extractTitle(this.createurl);
-        },
-        wellheck: function () {
-          if (this.$.itemajax.jsonObject) {
-            alert("you got a response, see code\n" + this.$.itemajax.response.detail);
-          }
-        },
-
-        extractTitle: function (url) {
-          var target = "" + url;
-          target = target.split('_');
-          var name = target.pop();
-          return "Create new " + name + ":";
-        },
-        createFormField: function (key, value, form, type) {
-          if (key.startsWith("_")) {
-            return;
-          } else {
-            var inputField = document.createElement(type);
-            inputField.label = key;
-            inputField.setAttribute('idname', key);
-            inputField.setAttribute("name", key);
-            inputField.value = value;
-            if (type == "paper-checkbox" && value) {
-              inputField.setAttribute('truefalse', true);
-            }
-            form.appendChild(inputField);
-            form.appendChild(document.createElement("BR"));
-          }
-        },
-        populateBody: function (form) {
-          if (this.schemaObject) {
-            var schema = this.schemaObject;
-            for (var key in schema) {
-              var myValueType = schema[key];
-              if (myValueType && myValueType["valueType"]) {
-                var fieldType = myValueType["valueType"];
-                if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer") {
-                  this.createFormField(key, "", form, "paper-input");
-                } else if (fieldType == "longText") {
-                  this.createFormField(key, "", form, "polyrest-textarea");
-                } else if (fieldType == "boolean") {
-                  this.createFormField(key, true, form, "polyrest-checkbox");
-                }
-              }
-            }
-          }
-        },
-        populateFooter: function () {
-        },
-        populate: function () {
-          this.populateTitle();
-          this.populateBody();
-          this.populateFooter();
-        },
-        createnewrecord: function (e) {
-          var elem = document.getElementById('inputform').elements;
-          var hasFields = false;
-          var fieldAttributeObject = {};
-          for (var i = 0; i < elem.length; i++) {
-            if (elem[i].value && elem[i].getAttribute("name")) {
-              hasFields = true;
-              fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
-            }
-          }
-          if (hasFields) {
-            var body = JSON.stringify(fieldAttributeObject);
-            this.$.itemajax.manual;
-            this.$.itemajax.ajaxBody = body;
-            this.$.itemajax.deslashedurl = this.createurl;
-            this.$.itemajax.ajaxMethod = "POST";
-            this.$.itemajax.generateAjaxRequest();
-            this.$.itemajax.auto;
-          }
-        }
+//        behaviors: [SlashHandler.PassUrl],
+//
+//        properties: {
+//          createurl: {
+//            type: String,
+//            notify: true,
+//            observer: 'populateTitle'
+//          },
+//          schemaspec: {
+//            type: String,
+//            notify: true,
+//            observer: 'initializeForm'
+//          },
+//          schemaObject: {
+//            type: Object,
+//            notify: true
+//          },
+//          recordId: {
+//            type: String,
+//            notify: true,
+//            observer: 'toggleUpdate'
+//          },
+//          titleName: {
+//            type: String,
+//            notify: true
+//          }
+//        },
+//        toggleUpdate: function(){
+//          if(this.recordId){
+//            console.log("UPDATE TOGGLED OFF "+ this.recordId);
+//            this.$.createReadyLabel.setAttribute("hidden", true);
+//            this.$.submitCreateButton.setAttribute("hidden", true);
+//            this.$.updateReadyLabel.removeAttribute("hidden");
+//            this.$.submitUpdateButton.removeAttribute("hidden");
+//            this.$.deleteReadyLabel.removeAttribute("hidden");
+//            this.$.submitDeleteButton.removeAttribute("hidden");
+//          }else{
+//            console.log("UPDATE TOGGLED ON "+ this.recordId);
+//            this.$.createReadyLabel.removeAttribute("hidden");
+//            this.$.submitCreateButton.removeAttribute("hidden");
+//            this.$.updateReadyLabel.setAttribute("hidden", true);
+//            this.$.submitUpdateButton.setAttribute("hidden", true);
+//            this.$.deleteReadyLabel.setAttribute("hidden", true);
+//            this.$.submitDeleteButton.setAttribute("hidden", true);
+//          }
+//        },
+//        attached: function(){
+//          this.toggleUpdate();
+//        },
+//        initializeForm: function () {
+//          console.log("SCHEMA:\n"+this.schemaspec);
+//          this.schemaObject = JSON.parse(this.schemaspec);
+//          this.populateTitle();
+//          var fieldForm = this.$.inputform;
+//          this.populateBody(fieldForm);
+//        },
+//        populateTitle: function () {
+//          console.log(this.createurl)
+//          this.$.title.innerText = this.extractTitle(this.createurl);
+//        },
+//        _handleResponse: function (data) {
+//          if (data) {
+//            var jsonObj = data.detail.response;
+//            var jsonText = JSON.stringify(jsonObj)
+//            console.log("RESPONSE RECEIVED:\n" + jsonText);
+//          }
+//        },
+//        _handleError: function () {
+//          alert("error");
+//        },
+//        extractTitle: function (url) {
+//          var target = "" + url;
+//          target = target.split('_');
+//          var name = target.pop();
+//          return "Create new " + name + ":";
+//        },
+//        createFormField: function (key, value, form, type) {
+//          if (key.startsWith("_")) {
+//            return;
+//          } else {
+//            var inputField = document.createElement(type);
+//            inputField.label = key;
+//            inputField.setAttribute('idname', key);
+//            inputField.setAttribute("name", key);
+//            inputField.value = value;
+//            if (type == "paper-checkbox" && value) {
+//              inputField.setAttribute('truefalse', true);
+//            }
+//            form.appendChild(inputField);
+//            form.appendChild(document.createElement("BR"));
+//          }
+//        },
+//        populateBody: function (form) {
+//          if (this.schemaObject) {
+//            var schema = this.schemaObject;
+//            for (var key in schema) {
+//              var myValueType = schema[key];
+//              if (myValueType && myValueType["valueType"]) {
+//                var fieldType = myValueType["valueType"];
+//                if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer") {
+//                  this.createFormField(key, "", form, "paper-input");
+//                } else if (fieldType == "longText") {
+//                  this.createFormField(key, "", form, "polyrest-textarea");
+//                } else if (fieldType == "boolean") {
+//                  this.createFormField(key, true, form, "polyrest-checkbox");
+//                }
+//              }
+//            }
+//          }
+//        },
+//        populate: function () {
+//          this.populateTitle();
+//          this.populateBody();
+//        },
+//        createnewrecord: function (e) {
+//          var elem = document.getElementById('inputform').elements;
+//          var hasFields = false;
+//          var fieldAttributeObject = {};
+//          for (var i = 0; i < elem.length; i++) {
+//            if (elem[i].value && elem[i].getAttribute("name")) {
+//              hasFields = true;
+//              fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
+//              console.log(":"+fieldAttributeObject[elem[i].getAttribute("name")]+ "="+elem[i].value)
+//            }
+//          }
+//          if (hasFields) {
+//            var realUrl = SlashHandler.PassUrl.decodeUrl(this.createurl);
+//            console.log("SUBMIT:\n"+JSON.stringify(fieldAttributeObject)+ "\n"+ realUrl);
+//            this.$.ajax.auto = false;
+//            this.$.ajax.body = JSON.stringify(fieldAttributeObject);
+//            this.$.ajax.method = "POST";
+//            this.$.ajax.url = realUrl;
+//            this.$.ajax.generateRequest();
+//            window.history.back();
+//          }
+//        },
+//        deleteRecord: function () {
+//          var obj = false;
+//          try {
+//            obj = this.$.itemajax.jsonObj;
+//            this.$.itemajax.manual;
+//            this.$.itemajax.ajaxMethod = "DELETE";
+//            this.$.itemajax.generateAjaxRequest();
+//            this.$.itemajax.auto;
+//            window.history.back();
+//          } catch (err) {
+//            console.log("APPEARS TO BE A PROBLEM WITH " + JSON.stringify(this.err));
+//          }
+//        },
+//        updateRecord: function () {
+//          console.log("SOME KIND OF UPDATE");
+//          var elem = document.getElementById('inputform').elements;
+//          var hasFields = false;
+//          var fieldAttributeObject = {};
+//          for (var i = 0; i < elem.length; i++) {
+//            if (elem[i].value && elem[i].getAttribute("name")) {
+//              hasFields = true;
+//              fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
+//              console.log(":"+fieldAttributeObject[elem[i].getAttribute("name")]+ "="+elem[i].value)
+//            }
+//          }
+////          if (hasFields) {
+////            var body = JSON.stringify(fieldAttributeObject);
+////            this.$.itemajax.manual;
+////            this.$.itemajax.ajaxBody = body;
+////            this.$.itemajax.deslashedurl = this.createurl;
+////            this.$.itemajax.ajaxMethod = "POST";
+////            this.$.itemajax.generateAjaxRequest();
+////            this.$.itemajax.auto;
+////          }
+//        }
       });
     })();
   </script>

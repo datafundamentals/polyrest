@@ -3,235 +3,250 @@
 <link rel="import" href="../schema-guesser/schema-guesser.html">
 
 <dom-module id="item-select">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <item-create-bar id="createbar" on-create="createRecord"></item-create-bar>
-    <item-ajax
-      id="itemajax"
-      deslashedurl="{{selecturl}}"
-      on-response="populate">
-    </item-ajax>
-    <paper-icon-button id="itemnext" icon="home"></paper-icon-button>
-    <paper-icon-button id="itemlast" icon="last"></paper-icon-button>
-  </template>
-  <script>
-    (function () {
-      'use strict';
-
-      var BASE_URL = new URL('./', document.location.href).href;
-
-      Polymer({
-        is: 'item-select',
-        properties: {
-          titleName: {
-            type: String,
-            notify: true
-          },
-          schemaencoded: {
-            type: String,
-            notify: true
-          }
-        },
-
-        behaviors: [SchemaGuesser, SlashHandler.PassUrl],
-
-        populateTitle: function () {
-          var obj = this.$.itemajax.jsonObj._embedded;
-          if (obj) {
-            for (var key in obj) {
-              this.$.itemajax.titleDiv.innerText = key;
-              this.titleName = key;
-              break;
+    <template>
+        <style>
+            :host {
+                display: block;
             }
-          } else {
-            this.$.itemajax.titleDiv.innerText = "No Data Found For This Link"
-          }
-        },
-        populateTable: function () {
-          var records = this.$.itemajax.jsonObj._embedded;
-          var schema = SchemaGuesser.guessFromSelectObject(records);
-          this.schemaencoded = encodeURIComponent(JSON.stringify(schema));
-          for (var myobj in schema) {
-            var myValueType = schema[myobj];
-            if (myValueType && myValueType["valueType"]) {
+        </style>
+        <item-create-bar id="createbar" on-create="createRecord"></item-create-bar>
+        <item-ajax
+                id="itemajax"
+                deslashedurl="{{selecturl}}"
+                on-response="populate">
+        </item-ajax>
+        <paper-icon-button id="itemnext" icon="home"></paper-icon-button>
+        <paper-icon-button id="itemlast" icon="last"></paper-icon-button>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+
+            var BASE_URL = new URL('./', document.location.href).href;
+
+            Polymer({
+                is: 'item-select',
+                properties: {
+                    titleName: {
+                        type: String,
+                        notify: true
+                    },
+                    schemaencoded: {
+                        type: String,
+                        notify: true
+                    }
+                },
+
+                behaviors: [SchemaGuesser, SlashHandler.PassUrl],
+
+                populateTitle: function () {
+                    var obj = this.$.itemajax.jsonObj._embedded;
+                    if (obj) {
+                        for (var key in obj) {
+                            this.$.itemajax.titleDiv.innerText = key;
+                            this.titleName = key;
+                            break;
+                        }
+                    } else {
+                        this.$.itemajax.titleDiv.innerText = "No Data Found For This Link"
+                    }
+                },
+                populateTable: function () {
+                    var records = this.$.itemajax.jsonObj._embedded;
+                    var schema = SchemaGuesser.guessFromSelectObject(records);
+                    this.schemaencoded = encodeURIComponent(JSON.stringify(schema));
+                    for (var myobj in schema) {
+                        var myValueType = schema[myobj];
+                        if (myValueType && myValueType["valueType"]) {
 //              console.log(">>>> " + myobj + ".valueType=" + myValueType["valueType"]);
-            }
-          }
-          var recordCount = false
-          try {
-            recordCount = this.$.itemajax.jsonObj.page.size;
-          } catch (err) {
-            recordCount = 1000;
-          }
-          var firstRecord = false;
-          try {
-            firstRecord = records[(this.titleName)][0];
-          } catch (err) {
-          }
-          this.tableHeads = [];
-          if (firstRecord) {
-            for (var key in firstRecord) {
-              this.tableHeads.push(key);
-            }
-          }
-          if (this.tableHeads.length > 0) {
-            var tableDiv = this.$.itemajax.bodyDiv;
-            tableDiv.innerText = "";
-            var table = document.createElement('TABLE');
-            table.border = 1;
-            var tableHead = document.createElement('THEAD');
-            table.appendChild(tableHead);
-            for (var i = 0; i < 3; i++) {
-              var td = document.createElement('TH');
-              td.width = '75';
-              td.appendChild(document.createTextNode(this.tableHeads[i]));
-              tableHead.appendChild(td);
-            }
-            var linktd = document.createElement('TH');
-            linktd.width = '50';
-            linktd.appendChild(document.createTextNode("links"));
-            tableHead.appendChild(linktd);
-            var tableBody = document.createElement('TBODY');
-            table.appendChild(tableBody);
-            for (var i = 0; i < recordCount; i++) {
-              var record = records[(this.titleName)][i];
-              if (record) {
-                var tr = document.createElement('TR');
-                tableBody.appendChild(tr);
-                var values = [];
-                for (var key in record) {
-                  var attrName = key;
-                  values.push(record[key]);
+                        }
+                    }
+                    var recordCount = false
+                    try {
+                        recordCount = this.$.itemajax.jsonObj.page.size;
+                    } catch (err) {
+                        recordCount = 1000;
+                    }
+                    var firstRecord = false;
+                    try {
+                        firstRecord = records[(this.titleName)][0];
+                    } catch (err) {
+                    }
+                    this.tableHeads = [];
+                    if (firstRecord) {
+                        for (var key in firstRecord) {
+                            this.tableHeads.push(key);
+                        }
+                    }
+                    if (this.tableHeads.length > 0) {
+                        var tableDiv = this.$.itemajax.bodyDiv;
+                        tableDiv.innerText = "";
+                        var table = document.createElement('TABLE');
+                        table.border = 1;
+                        var tableHead = document.createElement('THEAD');
+                        table.appendChild(tableHead);
+                        for (var i = 0; i < 3; i++) {
+                            var td = document.createElement('TH');
+                            td.width = '75';
+                            td.appendChild(document.createTextNode(this.tableHeads[i]));
+                            tableHead.appendChild(td);
+                        }
+                        var linktd = document.createElement('TH');
+                        linktd.width = '50';
+                        linktd.appendChild(document.createTextNode("links"));
+                        tableHead.appendChild(linktd);
+                        var tableBody = document.createElement('TBODY');
+                        table.appendChild(tableBody);
+                        for (var i = 0; i < recordCount; i++) {
+                            var record = records[(this.titleName)][i];
+                            if (record) {
+                                var tr = document.createElement('TR');
+                                tableBody.appendChild(tr);
+                                var values = [];
+                                for (var key in record) {
+                                    var attrName = key;
+                                    values.push(record[key]);
+                                }
+                                for (var j = 0; j < 3; j++) {
+                                    var td = document.createElement('TD');
+                                    td.width = '75';
+                                    var value = values[j];
+                                    if (value && value.length > 12) {
+                                        value = value.substring(0, 12);
+                                    }
+                                    td.appendChild(document.createTextNode(value));
+                                    tr.appendChild(td);
+                                }
+                                this.addItemViewLink(tr, record);
+                            }
+                        }
+                        tableDiv.appendChild(table);
+                    }
+                },
+                populateFooter: function () {
+                    var footerDiv = this.$.itemajax.footerDiv;
+                    footerDiv.innerText = "";
+                    var nextLinkVal = false;
+                    try {
+                        nextLinkVal = this.$.itemajax.jsonObj._links.next.href;
+                        nextLinkVal = this._transformLink(nextLinkVal);
+                    } catch (err) {
+                        //do nothing if not found
+                    }
+                    var prevLinkVal = false;
+                    try {
+                        prevLinkVal = this.$.itemajax.jsonObj._links.prev.href;
+                        prevLinkVal = this._transformLink(prevLinkVal);
+                    } catch (err) {
+                        //do nothing if not found
+                    }
+                    if (prevLinkVal) {
+                        var space = document.createElement('SPAN');
+                        space.innerText = '  ';
+                        var link = document.createElement('A');
+                        link.setAttribute("href", prevLinkVal);
+                        link.innerText = "prev";
+                        footerDiv.appendChild(link);
+                        footerDiv.appendChild(space);
+                    }
+                    if (nextLinkVal) {
+                        var space = document.createElement('SPAN');
+                        space.innerText = '  ';
+                        var link = document.createElement('A');
+                        link.setAttribute("href", nextLinkVal);
+                        link.innerText = "next";
+                        footerDiv.appendChild(link);
+                        footerDiv.appendChild(space);
+                    }
+                    var searchLinkVal = false;
+                    try {
+                        searchLinkVal = this.$.itemajax.jsonObj._links.search.href;
+                        searchLinkVal = this._searchLink(searchLinkVal);
+                    } catch (err) {
+                        //do nothing if not found
+                    }
+                    if (searchLinkVal) {
+                        var space = document.createElement('SPAN');
+                        space.innerText = '  ';
+                        var link = document.createElement('A');
+                        link.setAttribute("href", searchLinkVal);
+                        link.innerText = "search";
+                        footerDiv.appendChild(link);
+                        footerDiv.appendChild(space);
+                    }
+                },
+
+                _transformLink: function (linkVal) {
+                    var returnValue = linkVal;
+                    returnValue = SlashHandler.PassUrl.encodeUrl(returnValue);
+                    returnValue = BASE_URL + "itemselect/" + returnValue;
+                    return returnValue;
+                },
+
+                _searchLink: function (linkVal) {
+                    var returnValue = linkVal;
+                    returnValue = SlashHandler.PassUrl.encodeUrl(returnValue);
+                    returnValue = BASE_URL + "itemsearch/" + returnValue;
+                    return returnValue;
                 }
-                for (var j = 0; j < 3; j++) {
-                  var td = document.createElement('TD');
-                  td.width = '75';
-                  var value = values[j];
-                  if (value.length > 12) {
-                    value = value.substring(0, 12);
-                  }
-                  td.appendChild(document.createTextNode(value));
-                  tr.appendChild(td);
+
+                ,
+                addItemViewLink: function (tr, record) {
+
+                    var link = "";
+                    try {
+                        link = record._links.self.href;
+                        var id = this.extractId(SlashHandler.PassUrl.encodeUrl(link));
+                        var viewUrl = "/itemupsert/" + this.cleanSelectUrl() + "/" + this.schemaencoded + "/" + id
+//                        console.log("INSPECT THIS:\n"+ viewUrl);
+                        //            link = "/itemview/" + SlashHandler.PassUrl.encodeUrl(link);
+                        //            link = "#!/itemupsert/" + SlashHandler.PassUrl.encodeUrl(link)+ "/%7B%22name%22%3A%7B%22valueType%22%3A%22shortText%22%7D%2C%22descrip%22%3A%7B%22valueType%22%3A%22longText%22%7D%2C%22abrv%22%3A%7B%22valueType%22%3A%22shortText%22%7D%2C%22manadatory%22%3A%7B%22valueType%22%3A%22null%22%7D%2C%22authorId%22%3A%7B%22valueType%22%3A%22integer%22%7D%7D//3";
+                        link = "#!/itemupsert/http:__172.99.79.10:8156_projectphase/%7B%22name%22%3A%7B%22valueType%22%3A%22shortText%22%7D%2C%22descrip%22%3A%7B%22valueType%22%3A%22longText%22%7D%2C%22abrv%22%3A%7B%22valueType%22%3A%22shortText%22%7D%2C%22manadatory%22%3A%7B%22valueType%22%3A%22null%22%7D%2C%22authorId%22%3A%7B%22valueType%22%3A%22integer%22%7D%7D/-1";
+                    } catch (err) {
+                        if (record) {
+                            console.log("UNABLE TO PROCESS LINK:\n" + JSON.stringify(record) + "\nERR\n" + err);
+                        }
+                    }
+                    var td = document.createElement('TD');
+                    td.width = '50';
+                    var aref = document.createElement('A');
+//                    aref.setAttribute("href", link);
+                    aref.setAttribute("href", viewUrl);
+                    aref.innerText = "view";
+                    td.appendChild(aref);
+                    tr.appendChild(td);
                 }
-                this.addItemViewLink(tr, record);
-              }
-            }
-            tableDiv.appendChild(table);
-          }
-        },
-        populateFooter: function () {
-          var footerDiv = this.$.itemajax.footerDiv;
-          footerDiv.innerText = "";
-          var nextLinkVal = false;
-          try {
-            nextLinkVal = this.$.itemajax.jsonObj._links.next.href;
-            nextLinkVal = this._transformLink(nextLinkVal);
-          } catch (err) {
-            alert ("WOOSIES: " + err);
-          }
-          var prevLinkVal = false;
-          try {
-            prevLinkVal = this.$.itemajax.jsonObj._links.prev.href;
-            prevLinkVal = this._transformLink(prevLinkVal);
-          } catch (err) {
-            alert ("WOOSIES: " + err);
-          }
-          if (prevLinkVal) {
-            var space = document.createElement('SPAN');
-            space.innerText = '  ';
-            var link = document.createElement('A');
-            link.setAttribute("href", prevLinkVal);
-            link.innerText = "prev";
-            footerDiv.appendChild(link);
-            footerDiv.appendChild(space);
-          }
-          if (nextLinkVal) {
-            var space = document.createElement('SPAN');
-            space.innerText = '  ';
-            var link = document.createElement('A');
-            link.setAttribute("href", nextLinkVal);
-            link.innerText = "next";
-            footerDiv.appendChild(link);
-            footerDiv.appendChild(space);
-          }
-          var searchLinkVal = false;
-          try {
-            searchLinkVal = this.$.itemajax.jsonObj._links.search.href;
-            searchLinkVal = this._searchLink(searchLinkVal);
-          } catch (err) {
-            alert ("WOOSIES: " + err);
-          }
-          if (searchLinkVal) {
-            var space = document.createElement('SPAN');
-            space.innerText = '  ';
-            var link = document.createElement('A');
-            link.setAttribute("href", searchLinkVal);
-            link.innerText = "search";
-            footerDiv.appendChild(link);
-            footerDiv.appendChild(space);
-          }
-        },
+                ,
+                populate: function () {
+                    this.populateTitle();
+                    this.populateTable();
+                    this.populateFooter();
+                }
+                ,
+                extractId: function (url) {
+                    var target = "" + url;
+                    target = target.split('_');
+                    return  target.pop();
+                },
+                createRecord: function () {
+                    console.log("a");
+                    window.location = BASE_URL + "#!/itemupsert/" + this.cleanSelectUrl() + "/" + this.schemaencoded + "/-1";
+                    window.location.reload();
+                },
+                cleanSelectUrl: function(){
+                    var select = this.selecturl;
+                    if (select.indexOf("?") > 0) {
+                        select = select.substring(0, select.indexOf("?"));
+                    }
+                    if (select.endsWith("{")) {
+                        select = select = select.substring(0, select.length - 1);
+                    }
+                    return select;
+                }
 
-        _transformLink: function (linkVal) {
-          var returnValue = linkVal;
-          returnValue = SlashHandler.PassUrl.encodeUrl(returnValue);
-          returnValue = BASE_URL + "itemselect/" + returnValue;
-          return returnValue;
-        },
-
-        _searchLink: function (linkVal) {
-          var returnValue = linkVal;
-          returnValue = SlashHandler.PassUrl.encodeUrl(returnValue);
-          returnValue = BASE_URL + "itemsearch/" + returnValue;
-          return returnValue;
-        }
-
-        ,
-        addItemViewLink: function (tr, record) {
-          var link = "";
-          try {
-            link = record._links.self.href;
-            link = "/itemview/" + SlashHandler.PassUrl.encodeUrl(link);
-          } catch (err) {
-            if (record) {
-              console.log("UNABLE TO PROCESS LINK:\n" + JSON.stringify(record) + "\nERR\n" + err);
-            }
-          }
-          var td = document.createElement('TD');
-          td.width = '50';
-          var aref = document.createElement('A');
-          aref.setAttribute("href", link);
-          aref.innerText = "view";
-          td.appendChild(aref);
-          tr.appendChild(td);
-        }
-        ,
-        populate: function () {
-          this.populateTitle();
-          this.populateTable();
-          this.populateFooter();
-        }
-        ,
-        createRecord: function () {
-          console.log("a");
-          var select = this.selecturl;
-          if (select.indexOf("?") > 0) {
-            select = select.substring(0, select.indexOf("?"));
-          }
-          if (select.endsWith("{")) {
-            select = select = select.substring(0, select.length - 1);
-          }
-          window.location = BASE_URL + "#!/itemcreate/" + select + "/" + this.schemaencoded;
-          window.location.reload();
-        }
-
-      })
-      ;
-    })
-    ();
-  </script>
+            })
+            ;
+        })
+        ();
+    </script>
 </dom-module>

@@ -112,6 +112,25 @@
         },
         updateRecord: function () {
           console.log("SOME KIND OF UPDATE");
+          var elem = document.getElementById('inputform').elements;
+          var hasFields = false;
+          var fieldAttributeObject = {};
+          for (var i = 0; i < elem.length; i++) {
+            if (elem[i].value && elem[i].getAttribute("name")) {
+              hasFields = true;
+              fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
+              console.log(":"+fieldAttributeObject[elem[i].getAttribute("name")]+ "="+elem[i].value)
+            }
+          }
+//          if (hasFields) {
+//            var body = JSON.stringify(fieldAttributeObject);
+//            this.$.itemajax.manual;
+//            this.$.itemajax.ajaxBody = body;
+//            this.$.itemajax.deslashedurl = this.createurl;
+//            this.$.itemajax.ajaxMethod = "POST";
+//            this.$.itemajax.generateAjaxRequest();
+//            this.$.itemajax.auto;
+//          }
         },
         deleteRecord: function () {
           var obj = false;
@@ -121,7 +140,7 @@
             this.$.itemajax.ajaxMethod = "DELETE";
             this.$.itemajax.generateAjaxRequest();
             this.$.itemajax.auto;
-            alert("SOME KIND OF DELETE MIGHT HAVE HAPPENED but now I need to navigate back");
+            window.history.back();
           } catch (err) {
             console.log("APPEARS TO BE A PROBLEM WITH " + JSON.stringify(this.err));
           }

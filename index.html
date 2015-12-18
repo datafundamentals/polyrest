@@ -148,11 +148,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </paper-material>
           </section>
 
+          <section data-route="itemupsert-section">
+            <paper-material elevation="1">
+              <item-upsert createurl={{params.createurl}} schemaspec={{params.schemaspec}} recordid={{params.recordid}} ></item-upsert>
+            </paper-material>
+          </section>
+
           <section data-route="itemview-section">
             <paper-material elevation="1">
               <item-view viewurl={{params.viewurl}}></item-view>
             </paper-material>
           </section>
+
           <section data-route="consumer-section">
             <paper-material elevation="1">
               <cons-umer></cons-umer>

@@ -12,43 +12,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../schema-guesser/schema-guesser.html">
 
 <dom-module id="polyrest-home">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <!--<div>Hello from <span>{{foo}}</span></div>-->
-    <paper-input label="root API url:" value="{{rooturl}}"></paper-input>
-    <paper-icon-button on-tap="dosomething" id="setroot" icon="send"></paper-icon-button>
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <!--<div>Hello from <span>{{foo}}</span></div>-->
+        <paper-input label="root API url:" value="{{rooturl}}"></paper-input>
+        <paper-icon-button on-tap="dosomething" id="setroot" icon="send"></paper-icon-button>
 
-  </template>
-  <script>
-    (function () {
-      'use strict';
+    </template>
+    <script>
+        (function () {
+            'use strict';
 
-      Polymer({
-        is: 'polyrest-home',
+            Polymer({
+                is: 'polyrest-home',
 
-        behaviors: [SlashHandler.PassUrl],
+                behaviors: [SlashHandler.PassUrl],
 
 
-        properties: {
-          rooturl: {
-            type: String,
-            value: 'http://172.99.79.10:8156/',
-            notify: true
-          }
-        },
-        dosomething: function () {
-          var rootparam = SlashHandler.PassUrl.encodeUrl(this.rooturl);
-        var BASE_URL = new URL('./', document.location.href).href;
-        window.location = BASE_URL + "#!/itemlist/"+ rootparam;
-        window.location.reload();
-
+                properties: {
+                    rooturl: {
+                        type: String,
+                        value: 'http://172.99.79.10:8156/',
+                        notify: true
+                    }
+                },
+                dosomething: function () {
+                    var rootparam = SlashHandler.PassUrl.encodeUrl(this.rooturl);
+                    var BASE_URL = new URL('./', document.location.href).href;
+//                    console.log("THIS IS " + BASE_URL + "#!/itemlist/" + rootparam);
+                    window.location = BASE_URL + "#!/itemlist/" + rootparam;
+                    window.location.reload();
 //        alert("ho " + rootparam)}
-        }
-      });
-    })();
-  </script>
+                }
+            });
+        })();
+    </script>
 </dom-module>
