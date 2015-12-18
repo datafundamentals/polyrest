@@ -9,6 +9,7 @@
             :host {
                 display: block;
             }
+
             paper-icon-button {
                 margin-left: 5px;
                 margin-right: 5px;
@@ -122,7 +123,7 @@
                         this.$.ajax.method = "GET";
                         this.$.ajax.url = realUrl;
                         this.$.ajax.generateRequest();
-                    }else{
+                    } else {
                         this.initializeForm();
                     }
                 },
@@ -172,7 +173,6 @@
                     }
                 },
                 populateBody: function (form) {
-//          console.log("RECORDID: " + this.recordid);
                     if (this.schemaObject) {
                         var schema = this.schemaObject;
                         for (var key in schema) {
@@ -182,7 +182,7 @@
                                 if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer") {
                                     this.createFormField(key, this.fetchValue(key), form, "paper-input");
                                 } else if (fieldType == "longText") {
-                                    this.createFormField(key,  this.fetchValue(key), form, "polyrest-textarea");
+                                    this.createFormField(key, this.fetchValue(key), form, "polyrest-textarea");
                                 } else if (fieldType == "boolean") {
                                     this.createFormField(key, true, form, "polyrest-checkbox");
                                 }
@@ -190,11 +190,13 @@
                         }
                     }
                 },
-                fetchValue: function(key){
+                fetchValue: function (key) {
                     var value = "";
-                    var fetch = this.itemObject[key];
-                    if(fetch){
-                        value = fetch;
+                    if (this.itemObject) {
+                        var fetch = this.itemObject[key];
+                        if (fetch) {
+                            value = fetch;
+                        }
                     }
                     return value;
                 },
@@ -210,7 +212,7 @@
                         if (elem[i].value && elem[i].getAttribute("name")) {
                             hasFields = true;
                             fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
-                            console.log(":" + fieldAttributeObject[elem[i].getAttribute("name")] + "=" + elem[i].value)
+//                            console.log(":" + fieldAttributeObject[elem[i].getAttribute("name")] + "=" + elem[i].value)
                         }
                     }
                     if (hasFields) {
@@ -238,7 +240,6 @@
                     }
                 },
                 updateRecord: function () {
-                    console.log("SOME KIND OF UPDATE");
                     var elem = document.getElementById('inputform').elements;
                     var hasFields = false;
                     var fieldAttributeObject = {};
@@ -246,18 +247,39 @@
                         if (elem[i].value && elem[i].getAttribute("name")) {
                             hasFields = true;
                             fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
-                            console.log(":" + fieldAttributeObject[elem[i].getAttribute("name")] + "=" + elem[i].value)
+//                            console.log(":" + fieldAttributeObject[elem[i].getAttribute("name")] + "=" + elem[i].value)
                         }
                     }
-//          if (hasFields) {
-//            var body = JSON.stringify(fieldAttributeObject);
+                    if (hasFields) {
+                        var body = this.mergeEmptyFields(fieldAttributeObject);
+                        console.log("BODY:\n" + body);
 //            this.$.itemajax.manual;
 //            this.$.itemajax.ajaxBody = body;
 //            this.$.itemajax.deslashedurl = this.createurl;
 //            this.$.itemajax.ajaxMethod = "POST";
 //            this.$.itemajax.generateAjaxRequest();
 //            this.$.itemajax.auto;
-//          }
+                    }
+                },
+                mergeEmptyFields: function (fieldAttributeObject) {
+                    var newObject = {};
+                    var schema = this.schemaObject;
+                    for (var key in schema) {
+                        var fieldType = schema[key]["valueType"];
+                        newObject[key] = this.getMergedValue(key, fieldType, fieldAttributeObject);
+                    }
+                    return JSON.stringify(newObject);
+                },
+                getMergedValue: function (key, fieldType, sourceObject) {
+                    var newValue = sourceObject[key];
+                    if (!newValue) {
+                        if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer" || fieldType == "longText") {
+                            newValue = "";
+                        } else if (fieldType == "boolean") {
+                            newValue = false;
+                        }
+                    }
+                    return newValue;
                 }
             });
         })();
