@@ -153,8 +153,7 @@
                     }
                 },
                 populateTitle: function () {
-//          console.log(this.tableurl);
-                    this.$.title.innerText = this.extractTitle(this.tableurl);
+                    this.$.title.innerText = this.extractTitle();
                 },
                 _handleResponse: function (data) {
                     if (data && data.detail.response) {
@@ -168,11 +167,16 @@
                         alert("error");
                     }
                 },
-                extractTitle: function (url) {
-                    var target = "" + url;
+                extractTitle: function () {
+          console.log("WTF\n"+this.tableurl);
+                    var target = "" + this.tableurl;
                     target = target.split('_');
                     var name = target.pop();
-                    return "Create new " + name + ":";
+                    if (this.isUpdate) {
+                        return name + ": (id="+this.recordid+ ")";
+                    } else {
+                        return "Create new " + name + ":";
+                    }
                 },
                 createFormField: function (key, value, form, type) {
                     if (key.startsWith("_")) {
