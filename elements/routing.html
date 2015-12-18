@@ -55,12 +55,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
 
-    page('/itemcreate/:createurl/:schemaspec', scrollToTop, function (data) {
+    page('/itemcreate/:tableurl/:schemaspec', scrollToTop, function (data) {
       app.route = 'itemcreate-section';
       app.params = data.params;
     });
 
-    page('/itemupsert/:createurl/:schemaspec/:recordid', scrollToTop, function (data) {
+    page('/itemupsert/:tableurl/:schemaspec/:recordid', scrollToTop, function (data) {
       app.route = 'itemupsert-section';
       app.params = data.params;
     });

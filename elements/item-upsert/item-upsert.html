@@ -56,7 +56,7 @@
                 behaviors: [SlashHandler.PassUrl],
 
                 properties: {
-                    createurl: {
+                    tableurl: {
                         type: String,
                         notify: true
                     },
@@ -91,7 +91,7 @@
                     }
                 },
                 observers: [
-                    'fetchContent(createurl, recordid)', 'initializeForm(schemaspec, itemObject)'
+                    'fetchContent(tableurl, recordid)', 'initializeForm(schemaspec, itemObject)'
                 ],
                 toggleUpdate: function () {
                     if (this.recordid && this.recordid > -1) {
@@ -117,7 +117,7 @@
                     this.populateTitle();
                     this.toggleUpdate();
                     if (this.isUpdate) {
-                        var realUrl = SlashHandler.PassUrl.decodeUrl(this.createurl) + "/" + this.recordid;
+                        var realUrl = SlashHandler.PassUrl.decodeUrl(this.tableurl) + "/" + this.recordid;
                         console.log("FETCH FOR " + realUrl);
                         this.$.ajax.auto = false;
                         this.$.ajax.method = "GET";
@@ -135,8 +135,8 @@
                     this.populateBody(fieldForm);
                 },
                 populateTitle: function () {
-//          console.log(this.createurl);
-                    this.$.title.innerText = this.extractTitle(this.createurl);
+//          console.log(this.tableurl);
+                    this.$.title.innerText = this.extractTitle(this.tableurl);
                 },
                 _handleResponse: function (data) {
                     if (data && data.detail.response) {
@@ -216,7 +216,7 @@
                         }
                     }
                     if (hasFields) {
-                        var realUrl = SlashHandler.PassUrl.decodeUrl(this.createurl);
+                        var realUrl = SlashHandler.PassUrl.decodeUrl(this.tableurl);
 //                        console.log("SUBMIT:\n" + JSON.stringify(fieldAttributeObject) + "\n" + realUrl);
                         this.$.ajax.auto = false;
                         this.$.ajax.body = JSON.stringify(fieldAttributeObject);
@@ -255,7 +255,7 @@
                         console.log("BODY:\n" + body);
 //            this.$.itemajax.manual;
 //            this.$.itemajax.ajaxBody = body;
-//            this.$.itemajax.deslashedurl = this.createurl;
+//            this.$.itemajax.deslashedurl = this.tableurl;
 //            this.$.itemajax.ajaxMethod = "POST";
 //            this.$.itemajax.generateAjaxRequest();
 //            this.$.itemajax.auto;
@@ -273,9 +273,9 @@
                 getMergedValue: function (key, fieldType, sourceObject) {
                     var newValue = sourceObject[key];
                     if (!newValue) {
-                        if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer" || fieldType == "longText") {
+                        if (!fieldType == "boolean") {
                             newValue = "";
-                        } else if (fieldType == "boolean") {
+                        }else{
                             newValue = false;
                         }
                     }

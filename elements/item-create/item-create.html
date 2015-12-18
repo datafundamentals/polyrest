@@ -56,7 +56,7 @@ from item-view.html instead of figuring out how to share a common code base.
 //        behaviors: [SlashHandler.PassUrl],
 //
 //        properties: {
-//          createurl: {
+//          tableurl: {
 //            type: String,
 //            notify: true,
 //            observer: 'populateTitle'
@@ -110,8 +110,8 @@ from item-view.html instead of figuring out how to share a common code base.
 //          this.populateBody(fieldForm);
 //        },
 //        populateTitle: function () {
-//          console.log(this.createurl)
-//          this.$.title.innerText = this.extractTitle(this.createurl);
+//          console.log(this.tableurl)
+//          this.$.title.innerText = this.extractTitle(this.tableurl);
 //        },
 //        _handleResponse: function (data) {
 //          if (data) {
@@ -179,7 +179,7 @@ from item-view.html instead of figuring out how to share a common code base.
 //            }
 //          }
 //          if (hasFields) {
-//            var realUrl = SlashHandler.PassUrl.decodeUrl(this.createurl);
+//            var realUrl = SlashHandler.PassUrl.decodeUrl(this.tableurl);
 //            console.log("SUBMIT:\n"+JSON.stringify(fieldAttributeObject)+ "\n"+ realUrl);
 //            this.$.ajax.auto = false;
 //            this.$.ajax.body = JSON.stringify(fieldAttributeObject);
@@ -218,7 +218,7 @@ from item-view.html instead of figuring out how to share a common code base.
 ////            var body = JSON.stringify(fieldAttributeObject);
 ////            this.$.itemajax.manual;
 ////            this.$.itemajax.ajaxBody = body;
-////            this.$.itemajax.deslashedurl = this.createurl;
+////            this.$.itemajax.deslashedurl = this.tableurl;
 ////            this.$.itemajax.ajaxMethod = "POST";
 ////            this.$.itemajax.generateAjaxRequest();
 ////            this.$.itemajax.auto;
