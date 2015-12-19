@@ -168,12 +168,12 @@
                     }
                 },
                 extractTitle: function () {
-          console.log("WTF\n"+this.tableurl);
+                    console.log("WTF\n" + this.tableurl);
                     var target = "" + this.tableurl;
                     target = target.split('_');
                     var name = target.pop();
                     if (this.isUpdate) {
-                        return name + ": (id="+this.recordid+ ")";
+                        return name + ": (id=" + this.recordid + ")";
                     } else {
                         return "Create new " + name + ":";
                     }
@@ -275,12 +275,15 @@
                     if (hasFields) {
                         var body = this.mergeEmptyFields(fieldAttributeObject);
                         console.log("BODY:\n" + body);
-//            this.$.itemajax.manual;
-//            this.$.itemajax.ajaxBody = body;
-//            this.$.itemajax.deslashedurl = this.tableurl;
-//            this.$.itemajax.ajaxMethod = "POST";
-//            this.$.itemajax.generateAjaxRequest();
-//            this.$.itemajax.auto;
+                        var url = SlashHandler.PassUrl.decodeUrl(this.tableurl) + "/" + this.recordid;
+                        console.log("TABLE URL:\n" + url);
+                        this.$.ajax.auto = false;
+                        this.$.ajax.body = body;
+                        this.$.ajax.url = url;
+                        this.$.ajax.method = "PUT";
+                        this.$.ajax.generateRequest();
+                        this.$.ajax.auto = true;
+                        window.history.back();
                     }
                 },
                 mergeEmptyFields: function (fieldAttributeObject) {
