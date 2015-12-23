@@ -35,7 +35,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'todo-section';
     });
 
-
     page('/itemlist/:listurl', scrollToTop, function (data) {
       app.route = 'itemlist-section';
       app.params = data.params;
@@ -51,7 +50,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.params = data.params;
     });
 
-
     page('/itemcreate/:tableurl/:schemaspec', scrollToTop, function (data) {
       app.route = 'itemcreate-section';
       app.params = data.params;
@@ -66,7 +64,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'itemview-section';
       app.params = data.params;
     });
-
 
     // add #! before urls
     page({
