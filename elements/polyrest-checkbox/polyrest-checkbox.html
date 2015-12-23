@@ -17,16 +17,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
     </style>
-    <span>{{label}}</span>
-    <input type="hidden" name="{{idname}}"  value="{{truefalse}}">
-    <paper-checkbox value="{{truefalse}}"></paper-checkbox>
+    <paper-checkbox id="dummy" on-change="checkHandler">{{label}}</paper-checkbox>
+    <input  type="hidden"  name="{{idname}}" value="{{truefalse}}">
   </template>
+  //this gives instructions, I just don't understand it
+  //https://github.com/Polymer/polymer/issues/484
   <script>
   (function() {
     'use strict';
 
     Polymer({
-      is: 'polyrest-checkbox'
+      is: 'polyrest-checkbox',
+
+      observers: [
+        'checkTheBox(truefalse, idname)'
+      ],
+
+      properties: {
+        truefalse: {
+          type: String,
+          notify: true
+        },
+        idname: {
+          type: String,
+          notify: true
+        }
+      },
+      checkTheBox: function(){
+        if("true"==this.truefalse){
+          this.$.dummy.checked=true;
+        }
+      },
+      checkHandler: function(){
+        if(this.$.dummy.checked){
+          this.truefalse = "true";
+        }else{
+          this.truefalse = "false";
+        }
+      }
 
     });
   })();

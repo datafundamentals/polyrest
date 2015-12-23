@@ -4,312 +4,383 @@
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 
 <dom-module id="item-upsert">
-    <template>
-        <style>
-            :host {
-                display: block;
-            }
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
 
-            paper-icon-button {
-                margin-left: 5px;
-                margin-right: 5px;
-                display: block;
-                text-align: center;
-                color: #00796B;
-                width: 40px;
-                height: 40px;
-                background: #c5cae9;
-                border-radius: 4px;
-            }
+      paper-icon-button {
+        margin-left: 5px;
+        margin-right: 5px;
+        display: block;
+        text-align: center;
+        color: #00796B;
+        width: 40px;
+        height: 40px;
+        background: #c5cae9;
+        border-radius: 4px;
+      }
 
-        </style>
-        <h2 id="title">hi</h2>
-        <hr>
-        <form id="inputform">
-            <table>
-                <tr>
-                    <td>
+    </style>
+    <h2 id="title">hi</h2>
+    <hr>
+    <form id="inputform">
+      <table>
+        <tr>
+          <td>
 
-                        <span id="createReadyLabel">Create </span>
-                        <paper-icon-button id=submitCreateButton label="click" icon="add"
-                                           on-click="createnewrecord">Create
-                        </paper-icon-button>
-                    </td>
-                    <td>
-                        <span id="updateReadyLabel">Update </span>
-                        <paper-icon-button id=submitUpdateButton label="click" icon="redo"
-                                           on-click="updateRecord"></paper-icon-button>
-                    </td>
-                    <td>
-                        <span id="deleteReadyLabel">Delete </span>
-                        <paper-icon-button id=submitDeleteButton label="click" icon="delete"
-                                           on-click="deleteRecord"></paper-icon-button>
-                    </td>
-                </tr>
-            </table>
-            <div id="fieldNodes" name="fieldNodes"></div>
-        </form>
-        <iron-ajax
-                id="ajax"
-                auto="false"
-                handle-as="json"
-                content-type="application/json"
-                on-response="_handleResponse"
-                on-error="_handleError"
-                debounce-duration="300"></iron-ajax>
-    </template>
-    <script>
-        (function () {
-            'use strict';
+            <span id="createReadyLabel">Create </span>
+            <paper-icon-button id=submitCreateButton label="click" icon="add"
+                               on-click="createnewrecord">Create
+            </paper-icon-button>
+          </td>
+          <td>
+            <span id="updateReadyLabel">Update </span>
+            <paper-icon-button id=submitUpdateButton label="click" icon="redo"
+                               on-click="updateRecord"></paper-icon-button>
+          </td>
+          <td>
+            <span id="deleteReadyLabel">Delete </span>
+            <paper-icon-button id=submitDeleteButton label="click" icon="delete"
+                               on-click="deleteRecord"></paper-icon-button>
+          </td>
+        </tr>
+      </table>
+      <div id="fieldNodes" name="fieldNodes"></div>
+    </form>
+    <iron-ajax
+      id="ajax"
+      auto="false"
+      handle-as="json"
+      content-type="application/json"
+      on-response="_handleResponse"
+      on-error="_handleError"
+      debounce-duration="300"></iron-ajax>
+  </template>
+  <script>
+    (function () {
+      'use strict';
 
-            Polymer({
-                is: 'item-upsert',
+      Polymer({
+        is: 'item-upsert',
 
-                behaviors: [SlashHandler.PassUrl],
+        behaviors: [SlashHandler.PassUrl],
 
-                properties: {
-                    tableurl: {
-                        type: String,
-                        notify: true
-                    },
-                    schemaspec: {
-                        type: String,
-                        notify: true
-                    },
-                    schemaObject: {
-                        type: Object,
-                        notify: true
-                    },
-                    recordid: {
-                        type: String,
-                        notify: true
-                    },
-                    titleName: {
-                        type: String,
-                        notify: true
-                    },
-                    itemObject: {
-                        type: Object,
-                        notify: true
-                    },
-                    itemJson: {
-                        type: String,
-                        notify: true
-                    },
-                    isUpdate: {
-                        type: Boolean,
-                        notify: true,
-                        value: false
-                    }
-                },
-                observers: [
-                    'fetchContent(tableurl, recordid)', 'initializeForm(schemaspec, itemObject)'
-                ],
-                toggleUpdate: function () {
-                    if (this.recordid && this.recordid > -1) {
+        properties: {
+          tableurl: {
+            type: String,
+            notify: true
+          },
+          schemaspec: {
+            type: String,
+            notify: true
+          },
+          schemaObject: {
+            type: Object,
+            notify: true
+          },
+          recordid: {
+            type: String,
+            notify: true
+          },
+          recordurl: {
+            type: String,
+            notify: true
+          },
+          titleName: {
+            type: String,
+            notify: true
+          },
+          itemObject: {
+            type: Object,
+            notify: true
+          },
+          itemJson: {
+            type: String,
+            notify: true
+          },
+          isUpdate: {
+            type: Boolean,
+            notify: true,
+            value: false
+          }
+        },
+        observers: [
+          'fetchContent(tableurl, recordid)', 'initializeForm(schemaspec, itemObject)'
+        ],
+        toggleUpdate: function () {
+          if (this.recordid && this.recordid > -1) {
 //                        console.log("UPDATE TOGGLED to OFF " + this.recordid);
-                        this.isUpdate = true;
-                        this.$.createReadyLabel.setAttribute("hidden", true);
-                        this.$.submitCreateButton.setAttribute("hidden", true);
-                        this.$.updateReadyLabel.removeAttribute("hidden");
-                        this.$.submitUpdateButton.removeAttribute("hidden");
-                        this.$.deleteReadyLabel.removeAttribute("hidden");
-                        this.$.submitDeleteButton.removeAttribute("hidden");
-                    } else {
+            this.recordurl = SlashHandler.PassUrl.decodeUrl(this.tableurl) + "/" + this.recordid;
+            this.isUpdate = true;
+            this.$.createReadyLabel.setAttribute("hidden", true);
+            this.$.submitCreateButton.setAttribute("hidden", true);
+            this.$.updateReadyLabel.removeAttribute("hidden");
+            this.$.submitUpdateButton.removeAttribute("hidden");
+            this.$.deleteReadyLabel.removeAttribute("hidden");
+            this.$.submitDeleteButton.removeAttribute("hidden");
+          } else {
 //                        console.log("UPDATE TOGGLED to ON " + this.recordid);
-                        this.$.createReadyLabel.removeAttribute("hidden");
-                        this.$.submitCreateButton.removeAttribute("hidden");
-                        this.$.updateReadyLabel.setAttribute("hidden", true);
-                        this.$.submitUpdateButton.setAttribute("hidden", true);
-                        this.$.deleteReadyLabel.setAttribute("hidden", true);
-                        this.$.submitDeleteButton.setAttribute("hidden", true);
-                    }
-                },
-                fetchContent: function () {
-                    this.populateTitle();
-                    this.toggleUpdate();
-                    if (this.isUpdate) {
-                        var realUrl = SlashHandler.PassUrl.decodeUrl(this.tableurl) + "/" + this.recordid;
-                        console.log("FETCH FOR " + realUrl);
-                        this.$.ajax.auto = false;
-                        this.$.ajax.method = "GET";
-                        this.$.ajax.url = realUrl;
-                        this.$.ajax.generateRequest();
-                    } else {
-                        this.initializeForm();
-                    }
-                },
-                initializeForm: function () {
-                    console.log("SCHEMA:\n" + this.schemaspec);
-                    this.schemaObject = JSON.parse(this.schemaspec);
-                    this.populateTitle();
-                    var fieldForm = this.$.fieldNodes;
-                    this.removeFormContents(fieldForm);
-                    this.populateBody(fieldForm);
-                },
-                removeFormContents: function (fieldForm) {
-                    while (fieldForm.hasChildNodes()) {
-                        fieldForm.removeChild(fieldForm.lastChild);
-                    }
-                },
-                populateTitle: function () {
-                    this.$.title.innerText = this.extractTitle();
-                },
-                _handleResponse: function (data) {
-                    if (data && data.detail.response) {
-                        this.itemObject = data.detail.response;
-                        this.itemJson = JSON.stringify(this.itemObject);
-                        console.log("RESPONSE RECEIVED:\n" + this.itemJson);
-                    }
-                },
-                _handleError: function () {
-                    if (!this.$.ajax.url) {
-                        alert("error");
-                    }
-                },
-                extractTitle: function () {
-                    console.log("WTF\n" + this.tableurl);
-                    var target = "" + this.tableurl;
-                    target = target.split('_');
-                    var name = target.pop();
-                    if (this.isUpdate) {
-                        return name + ": (id=" + this.recordid + ")";
-                    } else {
-                        return "Create new " + name + ":";
-                    }
-                },
-                createFormField: function (key, value, form, type) {
-                    if (key.startsWith("_")) {
-                        return;
-                    } else {
-                        var inputField = document.createElement(type);
-                        inputField.label = key;
-                        inputField.setAttribute('idname', key);
-                        inputField.setAttribute("name", key);
-                        inputField.value = value;
-                        if (type == "paper-checkbox" && value) {
-                            inputField.setAttribute('truefalse', true);
-                        }
-                        form.appendChild(inputField);
-                        form.appendChild(document.createElement("BR"));
-                    }
-                },
-                populateBody: function (form) {
-                    if (this.schemaObject) {
-                        var schema = this.schemaObject;
-                        for (var key in schema) {
-                            var myValueType = schema[key];
-                            if (myValueType && myValueType["valueType"]) {
-                                var fieldType = myValueType["valueType"];
-                                if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer") {
-                                    this.createFormField(key, this.fetchValue(key), form, "paper-input");
-                                } else if (fieldType == "longText") {
-                                    this.createFormField(key, this.fetchValue(key), form, "polyrest-textarea");
-                                } else if (fieldType == "boolean") {
-                                    this.createFormField(key, true, form, "polyrest-checkbox");
-                                }
-                            }
-                        }
-                    }
-                },
-                fetchValue: function (key) {
-                    var value = "";
-                    if (this.itemObject) {
-                        var fetch = this.itemObject[key];
-                        if (fetch) {
-                            value = fetch;
-                        }
-                    }
-                    return value;
-                },
-                populate: function () {
-                    this.populateTitle();
-                    this.populateBody();
-                },
-                createnewrecord: function (e) {
-                    var elem = document.getElementById('inputform').elements;
-                    var hasFields = false;
-                    var fieldAttributeObject = {};
-                    for (var i = 0; i < elem.length; i++) {
-                        if (elem[i].value && elem[i].getAttribute("name")) {
-                            hasFields = true;
-                            fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
-//                            console.log(":" + fieldAttributeObject[elem[i].getAttribute("name")] + "=" + elem[i].value)
-                        }
-                    }
-                    if (hasFields) {
-                        var realUrl = SlashHandler.PassUrl.decodeUrl(this.tableurl);
-//                        console.log("SUBMIT:\n" + JSON.stringify(fieldAttributeObject) + "\n" + realUrl);
-                        this.$.ajax.auto = false;
-                        this.$.ajax.body = JSON.stringify(fieldAttributeObject);
-                        this.$.ajax.method = "POST";
-                        this.$.ajax.url = realUrl;
-                        this.$.ajax.generateRequest();
-                        window.history.back();
-                    }
-                },
-                deleteRecord: function () {
-                    var obj = false;
-                    try {
-                        obj = this.$.itemajax.jsonObj;
-                        this.$.itemajax.manual;
-                        this.$.itemajax.ajaxMethod = "DELETE";
-                        this.$.itemajax.generateAjaxRequest();
-                        this.$.itemajax.auto;
-                        window.history.back();
-                    } catch (err) {
-                        console.log("APPEARS TO BE A PROBLEM WITH " + JSON.stringify(this.err));
-                    }
-                },
-                updateRecord: function () {
-                    var elem = document.getElementById('inputform').elements;
-                    var hasFields = false;
-                    var fieldAttributeObject = {};
-                    for (var i = 0; i < elem.length; i++) {
-                        if (elem[i].value && elem[i].getAttribute("name")) {
-                            hasFields = true;
-                            fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
-//                            console.log(":" + fieldAttributeObject[elem[i].getAttribute("name")] + "=" + elem[i].value)
-                        }
-                    }
-                    if (hasFields) {
-                        var body = this.mergeEmptyFields(fieldAttributeObject);
-                        console.log("BODY:\n" + body);
-                        var url = SlashHandler.PassUrl.decodeUrl(this.tableurl) + "/" + this.recordid;
-                        console.log("TABLE URL:\n" + url);
-                        this.$.ajax.auto = false;
-                        this.$.ajax.body = body;
-                        this.$.ajax.url = url;
-                        this.$.ajax.method = "PUT";
-                        this.$.ajax.generateRequest();
-                        this.$.ajax.auto = true;
-                        window.history.back();
-                    }
-                },
-                mergeEmptyFields: function (fieldAttributeObject) {
-                    var newObject = {};
-                    var schema = this.schemaObject;
-                    for (var key in schema) {
-                        var fieldType = schema[key]["valueType"];
-                        newObject[key] = this.getMergedValue(key, fieldType, fieldAttributeObject);
-                    }
-                    return JSON.stringify(newObject);
-                },
-                getMergedValue: function (key, fieldType, sourceObject) {
-                    var newValue = sourceObject[key];
-                    if (!newValue) {
-                        if (fieldType != "boolean") {
-                            newValue = "";
-                        } else {
-                            newValue = false;
-                        }
-                    }
-                    if (fieldType == "boolean" && newValue == "on") {
-                        newValue = true;
-                    }
-                    return newValue;
+            this.$.createReadyLabel.removeAttribute("hidden");
+            this.$.submitCreateButton.removeAttribute("hidden");
+            this.$.updateReadyLabel.setAttribute("hidden", true);
+            this.$.submitUpdateButton.setAttribute("hidden", true);
+            this.$.deleteReadyLabel.setAttribute("hidden", true);
+            this.$.submitDeleteButton.setAttribute("hidden", true);
+          }
+        },
+        fetchContent: function () {
+          this.populateTitle();
+          this.toggleUpdate();
+          if (this.isUpdate) {
+            this.$.ajax.auto = false;
+            this.$.ajax.method = "GET";
+            this.$.ajax.url = this.recordurl;
+            this.$.ajax.generateRequest();
+          } else {
+            this.initializeForm();
+          }
+        },
+        initializeForm: function () {
+//          console.log("SCHEMA:\n" + this.schemaspec);
+          this.schemaObject = JSON.parse(this.schemaspec);
+          this.populateTitle();
+          var fieldForm = this.$.fieldNodes;
+          this.removeFormContents(fieldForm);
+          this.populateBody(fieldForm);
+        },
+        removeFormContents: function (fieldForm) {
+          while (fieldForm.hasChildNodes()) {
+            fieldForm.removeChild(fieldForm.lastChild);
+          }
+        },
+        populateTitle: function () {
+          this.$.title.innerText = this.extractTitle();
+        },
+        _handleResponse: function (data) {
+          if (data && data.detail.response) {
+            this.itemObject = data.detail.response;
+            this.itemJson = JSON.stringify(this.itemObject);
+//            console.log("RESPONSE RECEIVED:\n" + this.itemJson);
+          }
+        },
+        _handleError: function () {
+          if (!this.$.ajax.url) {
+            alert("error");
+          }
+        },
+        extractTitle: function () {
+          var target = "" + this.tableurl;
+          target = target.split('_');
+          var name = target.pop();
+          if (this.isUpdate) {
+            return name + ": (id=" + this.recordid + ")";
+          } else {
+            return "Create new " + name + ":";
+          }
+        },
+        createFormField: function (key, value, form, type) {
+          if (key.startsWith("_")) {
+            return;
+          } else {
+            var inputField = document.createElement(type);
+            inputField.label = key;
+            inputField.setAttribute("name", key);
+            inputField.value = value;
+            if (type == "polyrest-checkbox") {
+              inputField.setAttribute('truefalse', value);
+              inputField.setAttribute('idname', key);
+            }
+            if (type == "polyrest-textarea") {
+              inputField.setAttribute('text', value);
+              inputField.setAttribute('idname', key);
+            }
+            form.appendChild(inputField);
+            form.appendChild(document.createElement("BR"));
+          }
+        },
+        populateBody: function (form) {
+          if (this.schemaObject) {
+            var schema = this.schemaObject;
+            for (var key in schema) {
+              var myValueType = schema[key];
+              if (myValueType && myValueType["valueType"]) {
+                var fieldType = myValueType["valueType"];
+                if (fieldType == "integer" || fieldType == "decimal" || fieldType == "shortText" || fieldType == "integer") {
+                  this.createFormField(key, this.fetchValue(key), form, "paper-input");
+                } else if (fieldType == "longText") {
+                  this.createFormField(key, this.fetchValue(key), form, "polyrest-textarea");
+                } else if (fieldType == "boolean") {
+                  this.createFormField(key, this.fetchBooleanValue(key), form, "polyrest-checkbox");
                 }
-            });
-        })();
-    </script>
+              }
+            }
+          }
+        },
+        fetchValue: function (key) {
+          var value = "";
+          if (this.itemObject) {
+            var fetch = this.itemObject[key];
+            if (fetch) {
+              value = fetch;
+            }
+          }
+          return value;
+        },
+        fetchBooleanValue: function (key) {
+          var value = false;
+          if (this.itemObject) {
+            var fetch = this.itemObject[key];
+            if (fetch==true) {
+              value = fetch;
+            }
+          }
+          return value;
+        },
+        populate: function () {
+          this.populateTitle();
+          this.populateBody();
+        },
+        createnewrecord: function (e) {
+          var elem = document.getElementById('inputform').elements;
+          var hasFields = false;
+          var fieldAttributeObject = {};
+          for (var i = 0; i < elem.length; i++) {
+            if (elem[i].value && elem[i].getAttribute("name")) {
+              hasFields = true;
+              fieldAttributeObject[elem[i].getAttribute("name")] = elem[i].value;
+            }
+          }
+          if (hasFields) {
+            var realUrl = SlashHandler.PassUrl.decodeUrl(this.tableurl);
+//            console.log("FORM:\n" + JSON.stringify(fieldAttributeObject));
+            var body = this.mergeEmptyFields(fieldAttributeObject);
+//            console.log("BODY:\n" + body);
+//                        console.log("SUBMIT:\n" + JSON.stringify(fieldAttributeObject) + "\n" + realUrl);
+            this.$.ajax.auto = false;
+//                        this.$.ajax.body = JSON.stringify(fieldAttributeObject);
+            this.$.ajax.body = body;
+            this.$.ajax.method = "POST";
+            this.$.ajax.url = realUrl;
+            this.$.ajax.generateRequest();
+            window.history.back();
+          }
+        },
+        deleteRecord: function () {
+//                    var obj = false;
+          try {
+//                        obj = this.$.itemajax.jsonObj;
+            this.$.ajax.auto = false;
+            this.$.ajax.url = this.recordurl;
+            this.$.ajax.method = "DELETE";
+            this.$.ajax.generateRequest();
+            this.$.ajax.auto = true;
+            window.history.back();
+          } catch (err) {
+            console.log("IF YOU SEE THIS MESSAGE IT PROBABLY MEANS NOTHING " + JSON.stringify(this.err));
+          }
+        },
+        updateRecord: function () {
+          var formJson = this.serialize();
+//          console.log("FORM JSON\n" + JSON.stringify(formJson));
+          if (this.hasFields(formJson)) {
+            var body = this.mergeEmptyFields(formJson);
+//            console.log("UPDATING:\n" + body);
+            this.$.ajax.auto = false;
+            this.$.ajax.body = body;
+            this.$.ajax.url = this.recordurl;
+            this.$.ajax.method = "PUT";
+            this.$.ajax.generateRequest();
+            this.$.ajax.auto = true;
+            window.history.back();
+          }
+        },
+        hasFields: function(obj){
+          var returnValue = false;
+          if(obj){
+            for (var key in obj) {
+              returnValue = true;
+              break;
+            }
+          }
+          return returnValue;
+        },
+        serialize: function() {
+          var json = {};
+          var elements = document.getElementById('inputform').elements;
+
+          function addSerializedElement(el) {
+            // If the name doesn't exist, add it. Otherwise, serialize it to
+            // an array,
+            if (!json[el.name]) {
+              json[el.name] = el.value;
+            } else {
+              if (!Array.isArray(json[el.name])) {
+                json[el.name] = [json[el.name]];
+              }
+              json[el.name].push(el.value);
+            }
+          }
+
+          // Also go through the form's native elements.
+          for (var el, i = 0; el = elements[i], i < elements.length; i++) {
+            // Checkboxes and radio buttons should only use their value if they're checked.
+            // Also, custom elements that extend native elements (like an
+            // `<input is="fancy-input">`) will appear in both lists. Since they
+            // were already added as a custom element, they don't need
+            // to be re-added.
+            if (!this._useValue(el) ||
+              (el.hasAttribute('is') && json[el.name])) {
+              continue;
+            }
+            addSerializedElement(el);
+          }
+
+          return json;
+        },
+        _useValue: function(el) {
+          // Skip disabled elements or elements that don't have a `name` attribute.
+          if (el.disabled || !el.name) {
+            return false;
+          }
+
+          // Checkboxes and radio buttons should only use their value if they're
+          // checked. Custom paper-checkbox and paper-radio-button elements
+          // don't have a type, but they have the correct role set.
+          if (el.type == 'checkbox' ||
+            el.type == 'radio' ||
+            el.getAttribute('role') == 'checkbox' ||
+            el.getAttribute('role') == 'radio') {
+            return el.checked;
+          }
+          return true;
+        },
+
+        mergeEmptyFields: function (fieldAttributeObject) {
+          var newObject = {};
+          var schema = this.schemaObject;
+          for (var key in schema) {
+            var fieldType = schema[key]["valueType"];
+            newObject[key] = this.getMergedValue(key, fieldType, fieldAttributeObject);
+          }
+          return JSON.stringify(newObject);
+        },
+        getMergedValue: function (key, fieldType, sourceObject) {
+          var newValue = sourceObject[key];
+          if (!newValue) {
+            if (fieldType != "boolean") {
+              newValue = "";
+            } else {
+              newValue = false;
+            }
+          }
+          if (fieldType == "boolean" && (newValue == "on" || newValue == "true")) {
+            newValue = true;
+          }
+          return newValue;
+        }
+      });
+    })();
+  </script>
 </dom-module>

@@ -9,7 +9,7 @@
       }
     </style>
     <input type="hidden" name="{{idname}}" value="{{text}}">
-    <paper-textarea value="{{value}}" label="{{label}}"></paper-textarea>
+    <paper-textarea value="{{text}}" label="{{label}}"></paper-textarea>
   </template>
   <script>
     (function () {
@@ -18,7 +18,18 @@
 //    see https://github.com/PolymerElements/paper-input/issues/127 for why this exists
 
       Polymer({
-        is: 'polyrest-textarea'
+        is: 'polyrest-textarea',
+
+        properties: {
+          text: {
+            type: String,
+            notify: true
+          },
+          idname: {
+            type: String,
+            notify: true
+          }
+        }
 
       });
     })();
