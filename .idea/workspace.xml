@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="86f5137c-0853-4f05-abe6-90b99085e9ee" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/polyrest.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/README_ADDITIONS_TO_DEPS.txt" afterPath="$PROJECT_DIR$/LICENSE.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/elements.html" afterPath="$PROJECT_DIR$/elements/elements.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/item-ajax/item-ajax.html" afterPath="$PROJECT_DIR$/elements/item-ajax/item-ajax.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/item-create-bar/item-create-bar.html" afterPath="$PROJECT_DIR$/elements/item-create-bar/item-create-bar.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/item-list/item-list.html" afterPath="$PROJECT_DIR$/elements/item-list/item-list.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/item-search/item-search.html" afterPath="$PROJECT_DIR$/elements/item-search/item-search.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/item-select/item-select.html" afterPath="$PROJECT_DIR$/elements/item-select/item-select.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/item-upsert/item-upsert.html" afterPath="$PROJECT_DIR$/elements/item-upsert/item-upsert.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/polyrest-checkbox/polyrest-checkbox.html" afterPath="$PROJECT_DIR$/elements/polyrest-checkbox/polyrest-checkbox.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/polyrest-home/polyrest-home.html" afterPath="$PROJECT_DIR$/elements/polyrest-home/polyrest-home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/polyrest-textarea/polyrest-textarea.html" afterPath="$PROJECT_DIR$/elements/polyrest-textarea/polyrest-textarea.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/routing.html" afterPath="$PROJECT_DIR$/elements/routing.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/schema-guesser/schema-guesser.html" afterPath="$PROJECT_DIR$/elements/schema-guesser/schema-guesser.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/slash-handler/slash-handler.html" afterPath="$PROJECT_DIR$/elements/slash-handler/slash-handler.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elements/to-do/to-do.html" afterPath="$PROJECT_DIR$/elements/to-do/to-do.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
     </list>
     <ignored path="polyrest.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,8 +28,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.10302198">
-              <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.9478022">
+              <caret line="46" column="3" selection-start-line="46" selection-start-column="3" selection-end-line="46" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -592,12 +571,12 @@
       <created>1451486276050</created>
       <option name="number" value="Default" />
       <updated>1451486276050</updated>
-      <workItem from="1451486284618" duration="4091000" />
+      <workItem from="1451486284618" duration="4229000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4091000" />
+    <option name="totallyTimeSpent" value="4229000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="25" y="23" width="1415" height="877" extended-state="6" />
@@ -781,8 +760,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.10302198">
-          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.9478022">
+          <caret line="46" column="3" selection-start-line="46" selection-start-column="3" selection-end-line="46" selection-end-column="3" />
           <folding />
         </state>
       </provider>

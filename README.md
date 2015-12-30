@@ -20,7 +20,7 @@ You may have to answer Y/N to a few prompts on random .md files, but otherwise
  it should work on your local 'nix box without modification. (???). Tested on 
  macosx and ubuntu, that's about it.
  
-`
+```
 echo "About to create and run polyrest"
 polydir=$1
 if [ $# -eq 0 ]
@@ -44,5 +44,5 @@ rm -rf polyrest
 mv app polyrest
 cd polyrest
 python -m SimpleHTTPServer 8080
-`
+```
 
