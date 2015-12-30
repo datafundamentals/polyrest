@@ -1,30 +1,35 @@
+<!--
+@license
+Copyright (c) 2015 Pete Carapetyan. All rights reserved.
+This code may only be used under the BSD style license found at https://github.com/datafundamentals/polyrest/blob/master/LICENSE.txt
+-->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="slash-handler">
-  <script>
-    var SlashHandler = SlashHandler || {};
+    <script>
+        var SlashHandler = SlashHandler || {};
 
-    SlashHandler.PassUrl = {
-      encodeUrl: function (url) {
-        var target = url;
-        var newchar = '_';
-        target = target.split('/').join(newchar);
-        return encodeURIComponent(target);
-      },
-      decodeUrl: function (incomingUrl) {
-        if (incomingUrl) {
-          this.encodedUrl = incomingUrl;
-          var target = incomingUrl;
-          var newchar = '/';
-          target = target.split('_').join(newchar);
-          target = decodeURIComponent(target);
-          if (target && target.startsWith("http")) {
-            return target;
-          } else {
-            return 'http://' + target;
-          }
+        SlashHandler.PassUrl = {
+            encodeUrl: function (url) {
+                var target = url;
+                var newchar = '_';
+                target = target.split('/').join(newchar);
+                return encodeURIComponent(target);
+            },
+            decodeUrl: function (incomingUrl) {
+                if (incomingUrl) {
+                    this.encodedUrl = incomingUrl;
+                    var target = incomingUrl;
+                    var newchar = '/';
+                    target = target.split('_').join(newchar);
+                    target = decodeURIComponent(target);
+                    if (target && target.startsWith("http")) {
+                        return target;
+                    } else {
+                        return 'http://' + target;
+                    }
+                }
+            }
         }
-      }
-    }
-  </script>
+    </script>
 </dom-module>

@@ -1,72 +1,91 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-
+<!--
+@license
+Copyright (c) 2015 Pete Carapetyan. All rights reserved.
+This code may only be used under the BSD style license found at https://github.com/datafundamentals/polyrest/blob/master/LICENSE.txt
+-->
 <dom-module id="to-do">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h1>PolyRest</h1>
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <h1>PolyRest</h1>
 
-    <p>Perhaps analagous to PHPMyAdmin for MySQL, or to a lesser degree - Ruby on Rails or Grails, PolyRest asks the
-      question <strong><em>"What can I do with HATEOAS REST APIs,
-        without writing any table-specific code, and using Polymer as a front end for the Javascript?"</em></strong></p>
+        <p>Perhaps analagous to PHPMyAdmin for MySQL, or to a lesser degree - Ruby on Rails or Grails, PolyRest asks the
+            question <strong><em>"What can I do with HATEOAS REST APIs,
+                without writing any table-specific code, and using Polymer as a front end for the
+                Javascript?"</em></strong></p>
+        <p>Try it on your phone, on the web, it should work anywhere. Polymer makes a great foundation for this app.</p>
+        <p>Here is a 2 minute demo - in lieu of user documentation.</p>
+        <p>
+            <iframe width="455" height="255" src="https://www.youtube.com/embed/ydklb9T_8Bs" frameborder="0" allowfullscreen></iframe>
+        </p>
+        <p>The code for this app is <a
+                href="https://github.com/datafundamentals/polyrest">here</a> If
+            nothing else,
+            you can use some of the code as sample Polymer code for your own app.
+            The author is a novice at javascript, so what you will find will be very basic code.</p>
 
-    <p>The code for this app is <a
-      href="https://github.com/datafundamentals/polyrest">here</a> If
-      nothing else,
-      you can use some of the code as sample Polymer code for your own app.
-      The author is NOT an experienced javascript coder, so know that before going in.</p>
+        <p>PolyRest is a technical proof of concept ONLY, and not intended as production code in it's
+            current (or future?) form.</p>
+        <h4>Please! Do not hold Polymer responsible for...</h4>
 
-    <p>PolyRest is a technical proof of concept ONLY, and not intended as production code in it's
-      current (or future?) form.</p>
-    <h4>Please! Do not hold Polymer responsible for...</h4>
+        <p>...for the poor execution of visuals
+            on this technical POC. Polymer has great visual capabilities, the author of this POC does not. :(</p>
 
-    <p>...for the poor execution of visuals
-      on this technical POC. Polymer has great visual capabilities, the author of this POC does not. :(</p>
+        <h2>Pairing with Spring Data Rest and Spring Boot - back end option:</h2>
 
-    <h2>Pairing with Spring Data Rest and Spring Boot - back end option:</h2>
+        <p>Need your own data feed? Spend a day and knock out a big, pre-populated REST API set, like the <a
+                href="http://172.99.79.10:8156/">12 REST API samples</a>
+            or, the code <a
+                    href="https://bitbucket.org/datafundamentals/smoslt.data">here</a>. Yes, a day should be sufficient,
+            once
+            you learn that system. It's pretty easy, at least if you are a <em>[yawn]</em> conventional corporate java
+            developer.</p>
 
-    <p>Need your own data feed? Spend a day and knock out a big, pre-populated REST API set, like the <a
-      href="http://172.99.79.10:8156/">12 REST API samples</a>
-      or, the code <a
-        href="https://bitbucket.org/datafundamentals/smoslt.data">here</a>. Yes, a day should be sufficient, once
-      you learn that system. It's pretty easy, at least if you are a <em>[yawn]</em> conventional corporate java developer.</p>
+        <p>Then use this tool for basic CRUD operations on your new API</p>
 
-    <p>Then use this tool for basic CRUD operations on your new API</p>
+        <p>You now have working CRUD for your basic data set, and you still haven't made a dent in your development
+            budget!
+            Yeah! Focus your efforts on the value-adds that really matter, not just getting the basic CRUD
+            operations working.</p>
 
-    <p>You now have working CRUD for your basic data set, and you still haven't made a dent in your development budget!
-      Yeah! Focus your efforts on the value-adds that really matter, not just getting the basic CRUD
-      operations working.</p>
+        <h1>TO DO:</h1>
 
-    <h1>TO DO:</h1>
-
-    <p>The TO DO list is shown below, as if there was an intent to complete it. Any assumption that this is the case,
-      and that <em>'someone'</em> actually intends to do so, may be purely imaginary.</p>
-    <ul>
-      <li>Search doesn't work yet. You can pull up the input box, but nothing happens when you search.</li>
-      <li>Add toggle on-off button to jsonString</li>
-      <li>Need more REST APIs to call from than just this one</li>
-      <li>Need to test with other apis that this was not designed for - more as a curiosity.</li>
-      <li>Need to go back and write tests for everything done so far</li>
-      <li>Add an incoming page for inputting the base url, instead of just hardcoding to one, or typing in the browser
-        url.
-      </li>
-      <li>Test off-line to see what does and does not work? 12th of never, because requires https for the data feeds.</li>
-      <li>There is some super-cludgy form handling code in upsert that has no doubt
-        been written better in other frameworks, and needs to be brought in by someone more expert and familiar with it.</li>
-      <li>Hardcoded to add http:/ if given none, what if needs to add https?</li>
-      <li>.</li>
-    </ul>
-    <p>Anything like css, or prettying up this app for visual features, is not even contemplated. Pull requests welcome, if anything bugs you, suc as to have the visuals suck</p>
-  </template>
-  <script>
-    (function () {
-      'use strict';
-      Polymer({
-        is: 'to-do'
-      });
-    })();
-  </script>
+        <p>The TO DO list is shown below, as if there was an intent to complete it. Any assumption that this is the
+            case,
+            and that <em>'someone'</em> actually intends to do so, may be purely imaginary.</p>
+        <ul>
+            <li>Search doesn't work yet. You can pull up the input box, but nothing happens when you search.</li>
+            <li>Add toggle on-off button to jsonString</li>
+            <li>Need more REST APIs to call from than just this one</li>
+            <li>Need to test with other apis that this was not designed for - more as a curiosity.</li>
+            <li>Need to go back and write tests for everything done so far</li>
+            <li>Add an incoming page for inputting the base url, instead of just hardcoding to one, or typing in the
+                browser
+                url.
+            </li>
+            <li>Test off-line to see what does and does not work? 12th of never, because requires https for the data
+                feeds.
+            </li>
+            <li>There is some super-cludgy form handling code in upsert that has no doubt
+                been written better in other frameworks, and needs to be brought in by someone more expert and familiar
+                with it.
+            </li>
+            <li>Hardcoded to add http:/ if given none, what if needs to add https?</li>
+            <li>.</li>
+        </ul>
+        <p>Anything like css, or prettying up this app for visual features, is not even contemplated. Pull requests
+            welcome, if anything bugs you, suc as to have the visuals suck</p>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+            Polymer({
+                is: 'to-do'
+            });
+        })();
+    </script>
 </dom-module>
